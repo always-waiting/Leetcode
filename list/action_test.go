@@ -36,3 +36,36 @@ func TestMerge(t *testing.T) {
 		i++
 	}
 }
+
+func TestReverse(t *testing.T) {
+	data := []int{1, 2, 3, 4}
+	list := newListNode(data)
+	newList := reverseList(list)
+	report := []int{4, 3, 2, 1}
+	loop := list
+	i := 0
+	for {
+		if loop == nil {
+			break
+		}
+		if loop.Val != data[i] {
+			t.Errorf("反转修改了原始列表")
+			break
+		}
+		i++
+		loop = loop.Next
+	}
+	loop = newList
+	i = 0
+	for {
+		if loop == nil {
+			break
+		}
+		if loop.Val != report[i] {
+			t.Errorf("反转结果不对")
+			break
+		}
+		i++
+		loop = loop.Next
+	}
+}

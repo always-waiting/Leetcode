@@ -58,3 +58,28 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return ret
 }
+
+/*
+生成新的反转列表，原来的列表不变化
+*/
+func reverseList(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	ret := &ListNode{
+		Val: head.Val,
+	}
+	head = head.Next
+	for {
+		if head == nil {
+			break
+		}
+		tmp := &ListNode{
+			Val: head.Val,
+		}
+		tmp.Next = ret
+		ret = tmp
+		head = head.Next
+	}
+	return ret
+}
