@@ -47,6 +47,40 @@ func newCycleList(data []int, pos int) *ListNode {
 	return ret
 }
 
+func newIntersectionList(dataA, dataB []int, interVal, sa, sb int) (*ListNode, *ListNode) {
+	var retA, retB, loop, interNode *ListNode
+	for idx, val := range dataA {
+		tmp := &ListNode{Val: val}
+		if retA == nil {
+			retA = tmp
+			loop = tmp
+			continue
+		} else {
+			loop.Next = tmp
+			loop = tmp
+		}
+		if idx == sa && val == interVal {
+			interNode = loop
+		}
+	}
+	for idx, val := range dataB {
+		tmp := &ListNode{Val: val}
+		if retB == nil {
+			retB = tmp
+			loop = tmp
+			continue
+		}
+		if idx == sb && interNode != nil {
+			loop.Next = interNode
+			break
+		} else {
+			loop.Next = tmp
+			loop = tmp
+		}
+	}
+	return retA, retB
+}
+
 /*
 会修改列表本身,this变为队列最后一个元素
 */

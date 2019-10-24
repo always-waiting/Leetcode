@@ -134,3 +134,61 @@ func TestRemoveElements(t *testing.T) {
 	}
 
 }
+
+func TestIntersection(t *testing.T) {
+	dataA := []int{4, 1, 8, 4, 5}
+	dataB := []int{5, 0, 1, 8, 4, 5}
+	interVal := 8
+	skipA := 2
+	skipB := 3
+	listA, listB := newIntersectionList(dataA, dataB, interVal, skipA, skipB)
+	interList := getIntersectionNode1(listA, listB)
+	if interList == nil {
+		t.Errorf("交集链表获取失败")
+		return
+	}
+	loop := interList
+	testA := listA
+	testB := listB
+	i := 0
+	j := 0
+	for {
+		var tmpA, tmpB *ListNode
+		if i < skipA {
+			if dataA[i] != testA.Val {
+				t.Errorf("修改了原链表A")
+				break
+			}
+			i++
+			testA = testA.Next
+		} else {
+			tmpA = testA
+		}
+		if j < skipB {
+			if dataB[j] != testB.Val {
+				t.Error("修改了原链表B")
+				break
+			}
+			j++
+			testB = testB.Next
+		} else {
+			tmpB = testB
+		}
+		if tmpA != nil && tmpB != nil {
+			if loop != tmpA ||
+				loop != tmpB {
+				t.Error("交集获取失败")
+				break
+			}
+			loop = loop.Next
+			i++
+			j++
+			testA = testA.Next
+			testB = testB.Next
+		}
+		if i > skipA && j > skipB &&
+			tmpA == nil && tmpB == nil {
+			break
+		}
+	}
+}

@@ -201,3 +201,104 @@ func removeElements(head *ListNode, val int) *ListNode {
 	}
 	return ret.Next
 }
+
+// 消耗的内存过大
+func getIntersectionNode(headA, headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+	var totalA, totalB1, totalB2 int
+	var endA, endB *ListNode
+	// 计算A的长度,记录A的最后元素
+	loopA := headA
+	for {
+		if loopA == nil {
+			break
+		} else {
+			endA = loopA
+		}
+		loopA = loopA.Next
+		totalA++
+	}
+	// 计算B的长度,记录B的最后元素
+	loopB := headB
+	for {
+		if loopB == nil {
+			break
+		} else {
+			endB = loopB
+		}
+		loopB = loopB.Next
+		totalB1++
+	}
+	if endA != endB { // 没有交集
+		return nil
+	}
+	// 反转A
+	loopA = headA
+	endA = nil
+	for {
+		if loopA == nil {
+			break
+		}
+		tmp := loopA.Next
+		loopA.Next = endA
+		endA = loopA
+		loopA = tmp
+	}
+	// 再次计算B的长度
+	loopB = headB
+	for {
+		if loopB == nil {
+			break
+		}
+		loopB = loopB.Next
+		totalB2++
+	}
+	pastB := (totalB2 + totalB1 - totalA) / 2
+	ret := headB
+	i := 0
+	for {
+		if i == pastB {
+			break
+		}
+		ret = ret.Next
+		i++
+	}
+	// 再次反转A
+	for {
+		if endA == nil {
+			break
+		}
+		tmp := endA.Next
+		endA.Next = loopA
+		loopA = endA
+		endA = tmp
+	}
+	return ret
+}
+
+func getIntersectionNode1(headA, headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+	loopA := headA
+	loopB := headB
+	for {
+		if loopA == nil && loopB == nil {
+			break
+		}
+		if loopA == nil {
+			loopA = headB
+		}
+		if loopB == nil {
+			loopB = headA
+		}
+		if loopA == loopB {
+			return loopA
+		}
+		loopA = loopA.Next
+		loopB = loopB.Next
+	}
+	return nil
+}

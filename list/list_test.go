@@ -102,3 +102,58 @@ func TestReverse3(t *testing.T) {
 	}
 	t.Log("反转函数修改了原链表,但是内存占用过大")
 }
+
+func TestIntersectionCreate(t *testing.T) {
+	dataA := []int{4, 1, 8, 4, 5}
+	dataB := []int{5, 0, 1, 8, 4, 5}
+	interVal := 8
+	skipA := 2
+	skipB := 3
+	listA, listB := newIntersectionList(dataA, dataB, interVal, skipA, skipB)
+	loopA := listA
+	loopB := listB
+	i := 0
+	j := 0
+	for {
+		var tmpA, tmpB *ListNode
+		if loopA != nil {
+			if i < skipA {
+				if dataA[i] != loopA.Val {
+					t.Errorf("交集链表生成失败,第一个链表: 第%d个 %d <-> %d", i, dataA[i], loopA.Val)
+					break
+				}
+				i++
+				loopA = loopA.Next
+			} else {
+				tmpA = loopA
+			}
+		}
+		if loopB != nil {
+			if j < skipB {
+				if dataB[j] != loopB.Val {
+					t.Errorf("交集链表生成失败,第二个链表: 第%d个 %d <-> %d", i, dataB[j], loopB.Val)
+					break
+				}
+				j++
+				loopB = loopB.Next
+			} else {
+				tmpB = loopB
+			}
+		}
+		if tmpA != nil && tmpB != nil {
+			if tmpA != tmpB {
+				t.Errorf("交集链表生成失败,交集部分不对")
+				t.Log(tmpA.Val)
+				t.Log(tmpB.Val)
+				break
+			}
+			i++
+			j++
+			loopA = loopA.Next
+			loopB = loopB.Next
+		}
+		if loopA == nil && loopB == nil {
+			break
+		}
+	}
+}
