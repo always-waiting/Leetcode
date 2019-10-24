@@ -26,6 +26,15 @@ func TestCreate(t *testing.T) {
 	}
 }
 
+func TestCycleCreate(t *testing.T) {
+	data := []int{1, 2, 3, 4, 5, 6}
+	pos := 3
+	list := newCycleList(data, pos)
+	if !hasCycle(list) {
+		t.Errorf("单环链表生成失败")
+	}
+}
+
 func TestReverse1(t *testing.T) {
 	t.Log("运行反转函数reverseList1")
 	data := []int{1, 2, 3, 4, 5}

@@ -165,3 +165,22 @@ func isPalindrome1(head *ListNode) bool {
 	}
 	return true
 }
+
+func hasCycle(head *ListNode) bool {
+	if head == nil || head.Next == nil {
+		return false
+	}
+	fast := head
+	slow := head
+	for {
+		if fast == nil || fast.Next == nil {
+			return false
+		}
+		slow = slow.Next
+		fast = fast.Next.Next
+		if slow == fast {
+			return true
+		}
+	}
+	return false
+}

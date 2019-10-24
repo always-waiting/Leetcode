@@ -21,6 +21,32 @@ func newListNode(data []int) *ListNode {
 	return ret
 }
 
+func newCycleList(data []int, pos int) *ListNode {
+	if data == nil {
+		return nil
+	}
+	if pos < 0 || pos >= len(data) {
+		return newListNode(data)
+	}
+	var ret, loop, cycNode *ListNode
+	for idx, val := range data {
+		tmp := &ListNode{Val: val}
+		if idx == pos {
+			cycNode = tmp
+		}
+		if ret == nil {
+			ret = tmp
+			loop = tmp
+			continue
+		} else {
+			loop.Next = tmp
+			loop = tmp
+		}
+	}
+	loop.Next = cycNode
+	return ret
+}
+
 /*
 会修改列表本身,this变为队列最后一个元素
 */
