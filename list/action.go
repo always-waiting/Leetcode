@@ -184,3 +184,20 @@ func hasCycle(head *ListNode) bool {
 	}
 	return false
 }
+
+func removeElements(head *ListNode, val int) *ListNode {
+	loop := &ListNode{}
+	loop.Next = head
+	ret := loop
+	for {
+		if loop.Next == nil {
+			break
+		}
+		if loop.Next.Val == val {
+			loop.Next = loop.Next.Next
+		} else {
+			loop = loop.Next
+		}
+	}
+	return ret.Next
+}

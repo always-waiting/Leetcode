@@ -100,3 +100,37 @@ func TestPalindrome1(t *testing.T) {
 	}
 
 }
+
+func TestRemoveElements(t *testing.T) {
+	data := []int{6, 1, 2, 3, 6, 2, 6, 1, 6}
+	val := 6
+	list := newListNode(data)
+	newlist := removeElements(list, val)
+	i := 0
+	for {
+		if newlist == nil {
+			break
+		}
+		if data[i] != val {
+			if data[i] != newlist.Val {
+				t.Errorf("删除元素失败")
+				break
+			}
+			newlist = newlist.Next
+		}
+		i++
+	}
+	/*
+		注意list的链表结果,第一个元素总数存在的
+		因为那是调用函数的指针
+	*/
+	loop := list
+	for {
+		if loop == nil {
+			break
+		}
+		t.Log(loop.Val)
+		loop = loop.Next
+	}
+
+}
