@@ -69,3 +69,34 @@ func TestReverse(t *testing.T) {
 		loop = loop.Next
 	}
 }
+
+func TestPalindrome(t *testing.T) {
+	list := newListNode([]int{1, 2, 2, 1})
+	if !isPalindrome(list) {
+		t.Errorf("回文判断失败")
+	}
+}
+
+func TestPalindrome1(t *testing.T) {
+	data := []int{1, 2, 3, 2, 1}
+	list := newListNode(data)
+	if !isPalindrome1(list) {
+		t.Errorf("回文判断失败")
+	}
+	i := 0
+	for {
+		if list == nil {
+			break
+		}
+
+		if list.Val != data[i] {
+			t.Errorf("判断回文后，原链表变更")
+		}
+		i++
+		list = list.Next
+	}
+	if i != len(data) {
+		t.Errorf("判断回文后，原链表变更(长度): %d -> %d", len(data), i)
+	}
+
+}
