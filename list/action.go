@@ -387,3 +387,85 @@ func middleNode(head *ListNode) *ListNode {
 	}
 	return slow
 }
+
+/*
+给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+
+示例：
+
+给定一个链表: 1->2->3->4->5, 和 n = 2.
+
+当删除了倒数第二个节点后，链表变为 1->2->3->5.
+说明：
+
+给定的 n 保证是有效的。
+
+进阶：
+
+你能尝试使用一趟扫描实现吗？
+*/
+func removeNthFromEnd1(head *ListNode, n int) *ListNode {
+	total := 1
+	loop := head
+	for {
+		if loop == nil {
+			break
+		}
+		total++
+		loop = loop.Next
+	}
+	ret := &ListNode{Next: head}
+	loop = ret
+	var pre *ListNode
+	i := 0
+	for {
+		if i == total-n {
+			if loop.Next == nil {
+				pre.Next = nil
+			} else {
+				loop.Val = loop.Next.Val
+				loop.Next = loop.Next.Next
+			}
+			break
+		}
+		pre = loop
+		loop = loop.Next
+		i++
+	}
+	return ret.Next
+}
+
+/*
+连个指针的使用
+注意与快慢指针的不同
+快慢指针: 起始点相同，步长有固定差
+本例: 起始点有固定差,步长相同
+*/
+func removeNthFromEnd2(head *ListNode, n int) *ListNode {
+	ret := &ListNode{Next: head}
+	first := ret
+	second := ret
+	var pre *ListNode
+	for {
+		if n == 0 {
+			break
+		}
+		first = first.Next
+		n--
+	}
+	for {
+		if first == nil {
+			if second.Next == nil {
+				pre.Next = nil
+			} else {
+				second.Val = second.Next.Val
+				second.Next = second.Next.Next
+			}
+			break
+		}
+		pre = second
+		first = first.Next
+		second = second.Next
+	}
+	return ret.Next
+}
