@@ -374,3 +374,16 @@ func deleteNode(node *ListNode) {
 	node.Val = node.Next.Val
 	node.Next = node.Next.Next
 }
+
+func middleNode(head *ListNode) *ListNode {
+	fast := head
+	slow := head
+	for {
+		if fast == nil || fast.Next == nil {
+			break
+		}
+		fast = fast.Next.Next
+		slow = slow.Next
+	}
+	return slow
+}
