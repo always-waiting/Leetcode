@@ -302,3 +302,75 @@ func getIntersectionNode1(headA, headB *ListNode) *ListNode {
 	}
 	return nil
 }
+
+// 任意链表
+func deleteDuplicates(head *ListNode) *ListNode {
+	data := make(map[int]bool, 0)
+	loop := head
+	post := head
+	for {
+		if loop == nil {
+			break
+		}
+		if _, ok := data[loop.Val]; ok {
+			post.Next = loop.Next
+		} else {
+			data[loop.Val] = true
+			post = loop
+		}
+		loop = loop.Next
+
+	}
+	return head
+}
+
+// 排序链表去重
+func deleteDuplicates1(head *ListNode) *ListNode {
+	var val int
+	loop := head
+	post := head
+	for {
+		if loop == nil {
+			break
+		}
+		if val == loop.Val {
+			post.Next = loop.Next
+		} else {
+			val = loop.Val
+			post = loop
+		}
+		loop = loop.Next
+	}
+	return head
+}
+
+// 排序链表去重
+func deleteDuplicates2(head *ListNode) *ListNode {
+	loop := head
+	for {
+		if loop == nil && loop.Next == nil {
+			break
+		}
+		if loop.Next.Val == loop.Val {
+			loop.Next = loop.Next.Next
+		} else {
+			loop = loop.Next
+		}
+	}
+	return head
+}
+
+/*
+链表至少包含两个节点。
+链表中所有节点的值都是唯一的。
+给定的节点为非末尾节点并且一定是链表中的一个有效节点。
+不要从你的函数中返回任何结果。
+注意:
+没有给链表的头节点，node就是链表中需要删除的节点位置
+*/
+func deleteNode(node *ListNode) {
+	// 可以理解为把下一节点的信息拷贝的当前节点
+	// 从而完成了当前节点的删除
+	node.Val = node.Next.Val
+	node.Next = node.Next.Next
+}
