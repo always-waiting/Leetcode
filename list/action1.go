@@ -148,3 +148,91 @@ func rotateRight2(head *ListNode, k int) *ListNode {
 	}
 	return ret
 }
+
+/*
+反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+
+说明:
+1 ≤ m ≤ n ≤ 链表长度。
+
+示例:
+
+输入: 1->2->3->4->5->NULL, m = 2, n = 4
+输出: 1->4->3->2->5->NULL
+*/
+func reverseBetween1(head *ListNode, m int, n int) *ListNode {
+	if m == n {
+		return head
+	}
+	step := 1
+	loop := head
+	var start, end, preStart, postEnd *ListNode
+	for {
+		if loop == nil {
+			break
+		}
+		if step == m {
+			start = loop
+		}
+		if step == m-1 {
+			preStart = loop
+		}
+		if step == n {
+			end = loop
+			postEnd = end.Next
+			break
+		}
+		step++
+		loop = loop.Next
+	}
+	loop = start
+	for {
+		if loop == end {
+			loop.Next = postEnd
+			if preStart == nil {
+				head = loop
+			} else {
+				preStart.Next = loop
+			}
+			break
+		}
+		tmp := loop.Next
+		loop.Next = postEnd
+		postEnd = loop
+		loop = tmp
+	}
+	return head
+}
+
+func reverseBetween2(head *ListNode, m int, n int) *ListNode {
+	if m == n {
+		return head
+	}
+	step := 1
+	var prev, cur, con, tail *ListNode
+	cur = head
+	for {
+		if step == m {
+			con = prev
+			tail = cur
+		}
+		tmp := cur.Next
+		if step > m && step < n {
+			cur.Next = prev
+		}
+		if step == n {
+			tail.Next = tmp
+			if con == nil {
+				head = cur
+			} else {
+				con.Next = cur
+			}
+			cur.Next = prev
+			break
+		}
+		prev = cur
+		cur = tmp
+		step++
+	}
+	return head
+}
