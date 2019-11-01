@@ -32,7 +32,7 @@ func reorderList(head *ListNode) {
 	idx := 0
 	cur := head
 	for {
-		if idx > half {
+		if idx == half {
 			break
 		}
 		a := cur
@@ -43,15 +43,14 @@ func reorderList(head *ListNode) {
 			if n+idx == half {
 				break
 			}
-			if b == nil {
-				break
-			}
 			b = b.Next
 			n++
 		}
 		a.Next = b
 		if b != cur {
 			b.Next = cur
+		} else {
+			b.Next = nil
 		}
 		idx++
 	}
