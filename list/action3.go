@@ -127,30 +127,20 @@ func (this *MyLinkedList) AddAtIndex(index int, val int) {
 
 /** Delete the index-th node in the linked list, if the index is valid. */
 func (this *MyLinkedList) DeleteAtIndex(index int) {
-	/*
-		dummy := &MyLinkedList{Next: this}
-		pre := dummy
-		cur := this
-		for {
-			if cur == nil {
-				break
-			}
-			if index == 0 {
-				pre.Next = cur.Next
-				this.num--
-				break
-			}
-			index--
-			pre, cur = cur, cur.Next
-		}
-	*/
 	cur := this
 	pre := &MyLinkedList{Next: this}
 	for {
 		if cur == nil {
 			break
 		}
-		if index == 0 {
+		/*错误示例
+		if index == 0 { // 当删除第0个元素时，不会有效果
+			pre.Next = cur.Next
+			this.num--
+			break
+		}
+		*/
+		if index == 0 { // 注意删除方式!
 			if cur.Next == nil {
 				pre.Next = nil
 			} else {
