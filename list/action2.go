@@ -206,3 +206,93 @@ func insertionSortList(head *ListNode) *ListNode {
 	}
 	return head
 }
+
+/*
+给定两个非空链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储单个数字。将这两数相加会返回一个新的链表。
+你可以假设除了数字 0 之外，这两个数字都不会以零开头。
+
+进阶:
+如果输入链表不能修改该如何处理？换句话说，你不能对列表中的节点进行翻转。
+
+示例:
+输入: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
+输出: 7 -> 8 -> 0 -> 7
+*/
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	l1N, l2N := 0, 0
+	cur1, cur2 := l1, l2
+	for {
+		if cur1 == nil && cur2 == nil {
+			break
+		}
+		if cur1 != nil {
+			cur1 = cur1.Next
+			l1N++
+		}
+		if cur2 != nil {
+			cur2 = cur2.Next
+			l2N++
+		}
+	}
+	ret := &ListNode{}
+	var large, small *ListNode
+	var largeN, smallN int
+	if l1N < l2N {
+		largeN = l2N
+		large = l2
+		smallN = l1N
+		small = l1
+	} else {
+		largeN = l1N
+		large = l1
+		smallN = l2N
+		small = l2
+	}
+	cur := ret
+	totalRet := 1
+	for {
+		if large == nil && small == nil {
+			break
+		}
+		if largeN == smallN {
+			sum := &ListNode{
+				Val: large.Val + small.Val,
+			}
+			cur.Next, cur = sum, sum
+			largeN--
+			smallN--
+			large, small = large.Next, small.Next
+		} else if largeN > smallN {
+			sum := &ListNode{Val: large.Val}
+			cur.Next, cur = sum, sum
+			largeN--
+			large = large.Next
+		}
+		totalRet++
+	}
+	bit := 2
+	for {
+		count := bit
+		cur := ret
+		postcur := ret.Next
+		for {
+			if count == totalRet {
+				cur.Val = postcur.Val/10 + cur.Val
+				postcur.Val = postcur.Val % 10
+				break
+			}
+			cur, postcur = postcur, postcur.Next
+			count++
+		}
+		if bit == totalRet {
+			break
+		}
+		bit++
+	}
+	if ret.Val != 0 {
+		return ret
+	} else {
+		return ret.Next
+	}
+	return nil
+}
