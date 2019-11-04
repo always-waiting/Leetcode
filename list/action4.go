@@ -77,27 +77,23 @@ func sortedListToBST(head *ListNode) *TreeNode {
 	if head.Next == nil {
 		return &TreeNode{Val: head.Val}
 	}
-	return createTreeNodeWithMiddleList(head, nil)
-}
-
-func createTreeNodeWithMiddleList(head *ListNode, end *ListNode) *TreeNode {
-	if head == nil {
-		return nil
-	}
-	if head == end {
-		return &TreeNode{Val: head.Val}
-	}
 	fast := head
 	slow := head
+	var preSlow *ListNode
 	for {
-		if fast == end || fast.Next == end {
+		if fast == nil || fast.Next == nil {
 			break
 		}
 		fast = fast.Next.Next
-		slow = slow.Next
+		preSlow, slow = slow, slow.Next
 	}
+	if preSlow != nil {
+		preSlow.Next = nil
+	}
+	halfHead := slow.Next
+	slow.Next = nil
 	tree_node := &TreeNode{Val: slow.Val}
-	tree_node.Left = createTreeNodeWithMiddleList(head, slow)
-	tree_node.Right = createTreeNodeWithMiddleList(slow.Next, nil)
+	tree_node.Left = sortedListToBST(head)
+	tree_node.Right = sortedListToBST(halfHead)
 	return tree_node
 }
