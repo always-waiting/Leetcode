@@ -49,10 +49,8 @@ func reorderList(head *ListNode) {
 		a.Next = b
 		if b != cur {
 			b.Next = cur
-		} else {
-			b.Next = nil
 		}
 		idx++
 	}
-
+	cur.Next = nil
 }
