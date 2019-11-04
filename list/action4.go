@@ -87,9 +87,7 @@ func sortedListToBST(head *ListNode) *TreeNode {
 		fast = fast.Next.Next
 		preSlow, slow = slow, slow.Next
 	}
-	if preSlow != nil {
-		preSlow.Next = nil
-	}
+	preSlow.Next = nil
 	halfHead := slow.Next
 	slow.Next = nil
 	tree_node := &TreeNode{Val: slow.Val}
