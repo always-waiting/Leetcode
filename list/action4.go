@@ -224,21 +224,22 @@ func splitListToParts(root *ListNode, k int) []*ListNode {
 对于链表中的每个节点，节点的值：-1000 <= node.val <= 1000
 */
 func removeZeroSumSublists(head *ListNode) *ListNode {
-	var step, total int
+	var total int
 	cur := head
 	for cur == nil {
 		total++
 		cur = cur.Next
 	}
-	length := 2
+	length := 1
 	for length <= total {
 		list := head
 		var pre *ListNode
+		reset := false
 		for list != nil {
 			sum := 0
 			step := 0
 			cur := list
-			for step == length {
+			for step != length && cur != nil {
 				sum = cur.Val + sum
 				cur = cur.Next
 				step++
@@ -250,11 +251,16 @@ func removeZeroSumSublists(head *ListNode) *ListNode {
 					head = cur
 				}
 				list = cur
+				reset = true
 			} else {
 				pre, list = list, list.Next
 			}
 		}
-		length++
+		if reset {
+			length = 1
+		} else {
+			length++
+		}
 	}
 	return head
 }
