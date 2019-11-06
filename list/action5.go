@@ -43,3 +43,72 @@ func nextLargerNodes(head *ListNode) []int {
 	}
 	return ret
 }
+
+func nextLargerNodes1(head *ListNode) []int {
+	stack := Stack{items: make([]*StackNode, 0)}
+	ret := make([]int, 0)
+	cur := head
+	idx := 0
+	for cur != nil {
+		if stack.Len() == 0 {
+			stack.Push(&StackNode{
+				Val: cur.Val,
+				Idx: idx,
+			})
+		} else {
+			for stack.Len() != 0 {
+				if stack.Top().Val < cur.Val {
+					node := stack.Pop()
+					ret[node.Idx] = cur.Val
+				} else {
+					stack.Push(&StackNode{
+						Val: cur.Val,
+						Idx: idx,
+					})
+					break
+				}
+			}
+			if stack.Len() == 0 {
+				stack.Push(&StackNode{
+					Val: cur.Val,
+					Idx: idx,
+				})
+			}
+		}
+		ret = append(ret, 0)
+		idx++
+		cur = cur.Next
+	}
+	return ret
+}
+
+type StackNode struct {
+	Val int
+	Idx int
+}
+
+type Stack struct {
+	items []*StackNode
+}
+
+func (this *Stack) Push(node *StackNode) {
+	this.items = append(this.items, node)
+}
+
+func (this *Stack) Pop() (node *StackNode) {
+	len := len(this.items)
+	if len == 0 {
+		return
+	}
+	node = this.items[len-1]
+	this.items = this.items[:len-1]
+	return node
+}
+
+func (this Stack) Len() int {
+	return len(this.items)
+}
+
+func (this Stack) Top() *StackNode {
+	return this.items[len(this.items)-1]
+}
