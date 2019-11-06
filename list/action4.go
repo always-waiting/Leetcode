@@ -266,9 +266,26 @@ func removeZeroSumSublists(head *ListNode) *ListNode {
 }
 
 func removeZeroSumSublists1(head *ListNode) *ListNode {
+	cur := head
+	var pre *ListNode
+	// 去除所有的0
+	for cur != nil {
+		if cur.Val == 0 {
+			if pre == nil {
+				pre = cur.Next
+				head = cur.Next
+			} else {
+				pre.Next = cur.Next
+			}
+			cur = cur.Next
+		} else {
+			pre = cur
+			cur = cur.Next
+		}
+	}
 	dummy := &ListNode{Val: 0, Next: head}
 	sums := make([]int, 0)
-	cur := dummy
+	cur = dummy
 	idx := -1
 	for cur != nil {
 		if idx == -1 {
@@ -280,28 +297,35 @@ func removeZeroSumSublists1(head *ListNode) *ListNode {
 		cur = cur.Next
 	}
 	idxList := make([]int, 0)
-	skip := 0
+	end := 0
 	for idx1, val1 := range sums {
+		if idx1 < end {
+			continue
+		}
+		insert := false
 		for idx2, val2 := range sums {
-			if val1 == val2 && idx1 < idx2 && idx1 >= skip && idx2 >= skip {
-				idxList = append(idxList, idx1, idx2)
-				skip = idx2 + 1
+			if val1 == val2 && idx1 < idx2 && idx2 > end {
+				end = idx2
+				insert = true
 			}
+		}
+		if insert {
+			idxList = append(idxList, idx1, end)
 		}
 	}
 	if len(idxList) == 0 {
 		return head
 	}
 	cur = dummy
-	var pre *ListNode
 	idx = 0
 	count := 0
-	for cur != nil {
+	for cur != nil && idx < len(idxList)-1 {
 		if count == idxList[idx] {
 			pre = cur
 		}
 		if count == idxList[idx+1] {
 			pre.Next = cur.Next
+			idx = idx + 2
 		}
 		cur = cur.Next
 		count++
