@@ -258,11 +258,15 @@ func mergeKLists(lists []*ListNode) *ListNode {
 				idx = id
 			}
 		}
-		curs[idx] = curs[idx].Next
-		pre.Next = &ListNode{
-			Val: node.Val,
+		if curs[idx] != nil {
+			curs[idx] = curs[idx].Next
 		}
-		pre = pre.Next
+		if node != nil {
+			pre.Next = &ListNode{
+				Val: node.Val,
+			}
+			pre = pre.Next
+		}
 		tmpCurs := make([]*ListNode, 0)
 		for _, val := range curs {
 			if val != nil {
