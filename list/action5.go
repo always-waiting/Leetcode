@@ -226,3 +226,50 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 	}
 	return ret
 }
+
+/*
+合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。
+
+示例:
+输入:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+输出: 1->1->2->3->4->4->5->6
+*/
+func mergeKLists(lists []*ListNode) *ListNode {
+	dummy := &ListNode{}
+	curs := make([]*ListNode, 0)
+	for _, list := range lists {
+		curs = append(curs, list)
+	}
+	pre := dummy
+	for len(curs) != 0 {
+		var node *ListNode
+		var idx int
+		for id, list := range curs {
+			if list == nil {
+				continue
+			}
+			if node == nil || node.Val > list.Val {
+				node = list
+				idx = id
+			}
+		}
+		curs[idx] = curs[idx].Next
+		pre.Next = &ListNode{
+			Val: node.Val,
+		}
+		pre = pre.Next
+		tmpCurs := make([]*ListNode, 0)
+		for _, val := range curs {
+			if val != nil {
+				tmpCurs = append(tmpCurs, val)
+			}
+		}
+		curs = tmpCurs
+	}
+	return dummy.Next
+}
