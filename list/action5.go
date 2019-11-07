@@ -194,13 +194,14 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 	cur = head
 	step := 1
 	var pre, ret, linkHead, prelinkHead *ListNode
-	link := true
 	for cur != nil {
 		if total < k && step == 1 {
 			if linkHead != nil {
 				linkHead.Next = cur
 			}
-			link = false
+			if ret == nil {
+				ret = cur
+			}
 			break
 		}
 		if step == k {
@@ -219,12 +220,9 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 		}
 		total--
 		cur.Next, pre, cur = pre, cur, cur.Next
-	}
-	if link {
-		linkHead.Next = nil
-	}
-	if ret == nil {
-		ret = head
+		if step == 1 {
+			linkHead.Next = nil
+		}
 	}
 	return ret
 }
