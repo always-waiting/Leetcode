@@ -277,3 +277,70 @@ func mergeKLists(lists []*ListNode) *ListNode {
 	}
 	return dummy.Next
 }
+
+func mergeKLists1(lists []*ListNode) *ListNode {
+	if len(lists) == 0 {
+		return nil
+	}
+	mergeList := lists
+	for len(mergeList) != 1 {
+		num := len(mergeList)
+		newList := make([]*ListNode, 0)
+		for i := 0; i < num-1; i = i + 2 {
+			newList = append(newList, merge2List(mergeList[i], mergeList[i+1]))
+		}
+		if num%2 == 1 {
+			newList = append(newList, mergeList[num-1])
+		}
+		mergeList = newList
+	}
+	return mergeList[0]
+}
+
+func merge2List(list1, list2 *ListNode) *ListNode {
+	var ret, pre *ListNode
+	cur1 := list1
+	cur2 := list2
+	for cur1 != nil || cur2 != nil {
+		if cur1 == nil {
+			if ret == nil {
+				ret = cur2
+				pre = cur2
+			} else {
+				pre.Next = cur2
+				pre = cur2
+			}
+			cur2 = cur2.Next
+		} else if cur2 == nil {
+			if ret == nil {
+				ret = cur1
+				pre = cur1
+			} else {
+				pre.Next = cur1
+				pre = cur1
+			}
+			cur1 = cur1.Next
+		} else {
+			if cur1.Val < cur2.Val {
+				if ret == nil {
+					ret = cur1
+					pre = cur1
+				} else {
+					pre.Next = cur1
+					pre = cur1
+				}
+				cur1 = cur1.Next
+			} else {
+				if ret == nil {
+					ret = cur2
+					pre = cur2
+				} else {
+					pre.Next = cur2
+					pre = cur2
+				}
+				cur2 = cur2.Next
+			}
+		}
+	}
+	return ret
+}
