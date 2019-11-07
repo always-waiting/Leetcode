@@ -182,29 +182,49 @@ k 是一个正整数，它的值小于或等于链表的长度。
 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
 */
 func reverseKGroup(head *ListNode, k int) *ListNode {
+	if k == 1 || head == nil {
+		return head
+	}
 	cur := head
-	step := 1
-	var pre, ret, preHead *ListNode
+	var total int
 	for cur != nil {
+		cur = cur.Next
+		total++
+	}
+	cur = head
+	step := 1
+	var pre, ret, linkHead, prelinkHead *ListNode
+	link := true
+	for cur != nil {
+		if total < k && step == 1 {
+			if linkHead != nil {
+				linkHead.Next = cur
+			}
+			link = false
+			break
+		}
 		if step == k {
 			if ret == nil {
 				ret = cur
 			}
-			preHead.Next = cur
+			if prelinkHead != nil {
+				prelinkHead.Next = cur
+			}
 			step = 1
 		} else {
 			if step == 1 {
-				preHead = cur
+				prelinkHead, linkHead = linkHead, cur
 			}
-			/*
-				tmp := cur.Next
-				cur.Next = pre
-				pre = cur
-				cur = tmp
-			*/
 			step++
 		}
+		total--
 		cur.Next, pre, cur = pre, cur, cur.Next
+	}
+	if link {
+		linkHead.Next = nil
+	}
+	if ret == nil {
+		ret = head
 	}
 	return ret
 }
