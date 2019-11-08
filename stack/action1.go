@@ -113,3 +113,24 @@ func removeOuterParentheses(S string) string {
 	}
 	return string(rets)
 }
+
+func removeOuterParentheses1(S string) string {
+	num := 0
+	ret := make([]rune, 0)
+	for _, runeVal := range S {
+		strVal := string(runeVal)
+		if strVal == "(" {
+			if num > 0 {
+				ret = append(ret, runeVal)
+			}
+			num++
+		} else {
+			num--
+			if num > 0 {
+				ret = append(ret, runeVal)
+			}
+		}
+
+	}
+	return string(ret)
+}
