@@ -39,17 +39,17 @@ func (this StrArrStack) IsEmpty() bool {
 }
 
 // 用链表实现栈
-type stackNode struct {
+type stackStrNode struct {
 	val  string
-	next *stackNode
+	next *stackStrNode
 }
 
 type StrListStack struct {
-	node *stackNode
+	node *stackStrNode
 }
 
 func (this *StrListStack) Push(item string) {
-	node := stackNode{val: item}
+	node := stackStrNode{val: item}
 	node.next = this.node
 	this.node = &node
 }
@@ -71,6 +71,55 @@ func (this *StrListStack) Top() string {
 }
 
 func (this StrListStack) IsEmpty() bool {
+	if this.node == nil {
+		return true
+	}
+	return false
+}
+
+// 用interface{}表示值
+type stackNode struct {
+	val  interface{}
+	next *stackNode
+}
+
+func (this *stackNode) Int() int {
+	val, ok := this.val.(int)
+	if !ok {
+		panic("不能转化为int")
+	}
+	return val
+}
+
+func (this *stackNode) String() string {
+	val, ok := this.val.(string)
+	if !ok {
+		panic("不能转换为string")
+	}
+	return val
+}
+
+type Stack struct {
+	node *stackNode
+}
+
+func (this *Stack) Push(item interface{}) {
+	node := stackNode{val: item}
+	node.next = this.node
+	this.node = &node
+}
+
+func (this *Stack) Pop() {
+	if this.node != nil {
+		this.node = this.node.next
+	}
+}
+
+func (this *Stack) Top() *stackNode {
+	return this.node
+}
+
+func (this *Stack) IsEmpty() bool {
 	if this.node == nil {
 		return true
 	}
