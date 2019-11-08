@@ -37,3 +37,42 @@ func (this StrArrStack) IsEmpty() bool {
 	}
 	return false
 }
+
+// 用链表实现栈
+type stackNode struct {
+	val  string
+	next *stackNode
+}
+
+type StrListStack struct {
+	node *stackNode
+}
+
+func (this *StrListStack) Push(item string) {
+	node := stackNode{val: item}
+	node.next = this.node
+	this.node = &node
+}
+
+func (this *StrListStack) Pop() string {
+	if this.node == nil {
+		panic("stack is empty")
+	}
+	node := this.node
+	this.node = node.next
+	return node.val
+}
+
+func (this *StrListStack) Top() string {
+	if this.node == nil {
+		panic("stack is empty")
+	}
+	return this.node.val
+}
+
+func (this StrListStack) IsEmpty() bool {
+	if this.node == nil {
+		return true
+	}
+	return false
+}
