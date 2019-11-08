@@ -84,32 +84,32 @@ S[i] 为 "(" 或 ")"
 S 是一个有效括号字符串
 */
 func removeOuterParentheses(S string) string {
-	items := make([]string, 0)
+	//items := make([]string, 0)
 	stack := Stack{}
-	var item string
-	for _, runeVal := range S {
+	idxMap := make(map[int]bool, 0)
+	for idx, runeVal := range S {
 		val := string(runeVal)
 		if stack.IsEmpty() {
 			stack.Push(val)
+			idxMap[idx] = true
 		} else {
 			node := stack.Top()
 			cmp := node.String() + val
 			if cmp != "{}" && cmp != "[]" && cmp != "()" {
 				stack.Push(val)
 			} else {
-				item = node.String() + item + val
 				stack.Pop()
 				if stack.IsEmpty() {
-					items = append(items, item)
-					item = ""
+					idxMap[idx] = true
 				}
 			}
 		}
 	}
-	var ret string
-	for _, val := range items {
-		tmp := string(val[1 : len(val)-1])
-		ret = ret + tmp
+	rets := make([]rune, 0)
+	for idx, val := range S {
+		if _, ok := idxMap[idx]; !ok {
+			rets = append(rets, val)
+		}
 	}
-	return ret
+	return string(rets)
 }

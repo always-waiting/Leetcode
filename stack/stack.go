@@ -125,3 +125,13 @@ func (this *Stack) IsEmpty() bool {
 	}
 	return false
 }
+
+func (this *Stack) Len() int {
+	cur := this.node
+	len := 0
+	for cur != nil {
+		len++
+		cur = cur.next
+	}
+	return len
+}
