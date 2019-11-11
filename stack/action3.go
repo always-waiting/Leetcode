@@ -102,10 +102,12 @@ func preorderTraversal1(root *TreeNode) []int {
 			panic("错误")
 		}
 		ret = append(ret, node.Val)
-		if node.Left != nil {
+		if node.Left != nil && node.Right != nil {
+			stack.Push(node.Right)
 			stack.Push(node.Left)
-		}
-		if node.Right != nil {
+		} else if node.Left != nil {
+			stack.Push(node.Left)
+		} else if node.Right != nil {
 			stack.Push(node.Right)
 		}
 	}
