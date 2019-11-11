@@ -99,6 +99,14 @@ func (this *stackNode) String() string {
 	return val
 }
 
+func (this *stackNode) Rune() rune {
+	val, ok := this.val.(rune)
+	if !ok {
+		panic("不能转换为rune")
+	}
+	return val
+}
+
 type Stack struct {
 	node *stackNode
 }
@@ -109,10 +117,12 @@ func (this *Stack) Push(item interface{}) {
 	this.node = &node
 }
 
-func (this *Stack) Pop() {
+func (this *Stack) Pop() *stackNode {
+	node := this.node
 	if this.node != nil {
 		this.node = this.node.next
 	}
+	return node
 }
 
 func (this *Stack) Top() *stackNode {
