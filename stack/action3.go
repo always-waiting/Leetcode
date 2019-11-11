@@ -122,20 +122,21 @@ func preorderTraversal1(root *TreeNode) []int {
 提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。
 */
 func dailyTemperatures(T []int) []int {
-	stack := Stack{}
 	ret := make([]int, len(T))
-	var slice int
+	stack := Stack{}
 	for i := len(T) - 1; i >= 0; i-- {
-		step := 1
-		for !stack.IsEmpty() && stack.Top().Int() < T[i] {
-			slice++
-			stack.Pop()
-		}
-		if stack.IsEmpty() {
-			step = 0
+		step := 0
+		tmp := stack
+		for !tmp.IsEmpty() {
+			if tmp.Top().Int() > T[i] {
+				ret[i] = step + 1
+				break
+			} else {
+				step++
+				tmp.Pop()
+			}
 		}
 		stack.Push(T[i])
-		ret[i] = step + slice
 	}
 	return ret
 }
