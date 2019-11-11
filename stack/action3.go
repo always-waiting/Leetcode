@@ -87,3 +87,27 @@ func preorderTraversal(root *TreeNode) []int {
 	}
 	return ret
 }
+
+func preorderTraversal1(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	stack := Stack{}
+	stack.Push(root)
+	ret := make([]int, 0)
+	for !stack.IsEmpty() {
+		tmp := stack.Pop()
+		node, ok := tmp.val.(*TreeNode)
+		if !ok {
+			panic("错误")
+		}
+		ret = append(ret, node.Val)
+		if node.Left != nil {
+			stack.Push(node.Left)
+		}
+		if node.Right != nil {
+			stack.Push(node.Right)
+		}
+	}
+	return ret
+}
