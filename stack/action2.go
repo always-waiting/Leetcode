@@ -326,3 +326,38 @@ func zigzagLevelOrderCurse(root *TreeNode, flag bool) [][]int {
 	}
 	return ret
 }
+
+func zigzagLevelOrder1(root *TreeNode) [][]int {
+	flag := true
+	stack := Stack{}
+	stack.Push(root)
+	ret := make([][]int, 0)
+	for !stack.IsEmpty() {
+		innerStack := Stack{}
+		var level []int
+		for !stack.IsEmpty() {
+			tmp := stack.Pop()
+			node, ok := tmp.val.(*TreeNode)
+			if !ok {
+				panic("错误")
+			}
+			if node == nil {
+				continue
+			}
+			level = append(level, node.Val)
+			if flag {
+				innerStack.Push(node.Left)
+				innerStack.Push(node.Right)
+			} else {
+				innerStack.Push(node.Right)
+				innerStack.Push(node.Left)
+			}
+		}
+		flag = !flag
+		stack = innerStack
+		if len(level) > 0 {
+			ret = append(ret, level)
+		}
+	}
+	return ret
+}
