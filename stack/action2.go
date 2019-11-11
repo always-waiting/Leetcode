@@ -213,3 +213,33 @@ func inorderTraversal(root *TreeNode) []int {
 	}
 	return ret
 }
+
+func inorderTraversal(root *TreeNode) []int {
+	ret := make([]int, 0)
+	stack := Stack{}
+	stack.Push(root)
+	for !stack.IsEmpty() {
+		tmp := stack.Pop()
+		node, ok := tmp.val.(*TreeNode)
+		if !ok {
+			panic("错误")
+		}
+		if node == nil {
+			continue
+		}
+		right := node.Right
+		left := node.Left
+		node.Right = nil
+		node.Left = nil
+		if right != nil {
+			stack.Push(right)
+		}
+		if left != nil {
+			stack.Push(node)
+			stack.Push(left)
+		} else {
+			ret = append(ret, node.Val)
+		}
+	}
+	return ret
+}
