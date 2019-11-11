@@ -57,3 +57,33 @@ func simplifyPath(path string) string {
 	}
 	return "/" + strings.Join(ret, "/")
 }
+
+/*
+给定一个二叉树，返回它的 前序 遍历。
+
+示例:
+输入: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+输出: [1,2,3]
+进阶: 递归算法很简单，你可以通过迭代算法完成吗？
+*/
+func preorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	ret := []int{root.Val}
+	if root.Left != nil {
+		left := preorderTraversal(root.Left)
+		ret = append(ret, left...)
+	}
+	if root.Right != nil {
+		right := preorderTraversal(root.Right)
+		ret = append(ret, right...)
+	}
+	return ret
+}
