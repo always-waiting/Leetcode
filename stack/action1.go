@@ -177,3 +177,21 @@ func nextGreaterElement(nums1 []int, nums2 []int) []int {
 	}
 	return ret
 }
+
+func nextGreaterElement1(nums1 []int, nums2 []int) []int {
+	ret := make([]int, 0)
+	total := len(nums2)
+	for _, val := range nums1 {
+		num := -1
+		for i := total - 1; i >= 0; i-- {
+			if nums2[i] == val {
+				break
+			}
+			if nums2[i] > val {
+				num = nums2[i]
+			}
+		}
+		ret = append(ret, num)
+	}
+	return ret
+}
