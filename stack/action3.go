@@ -123,20 +123,18 @@ func preorderTraversal1(root *TreeNode) []int {
 */
 func dailyTemperatures(T []int) []int {
 	ret := make([]int, len(T))
-	stack := Stack{}
+	stackT := Stack{}
+	stackI := Stack{}
 	for i := len(T) - 1; i >= 0; i-- {
-		step := 0
-		tmp := stack
-		for !tmp.IsEmpty() {
-			if tmp.Top().Int() > T[i] {
-				ret[i] = step + 1
-				break
-			} else {
-				step++
-				tmp.Pop()
-			}
+		for !stackT.IsEmpty() && stackT.Top().Int() <= T[i] {
+			stackT.Pop()
+			stackI.Pop()
 		}
-		stack.Push(T[i])
+		if !stackT.IsEmpty() {
+			ret[i] = stackI.Top().Int() - i
+		}
+		stackT.Push(T[i])
+		stackI.Push(i)
 	}
 	return ret
 }
