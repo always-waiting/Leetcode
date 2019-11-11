@@ -243,3 +243,86 @@ func inorderTraversal(root *TreeNode) []int {
 	}
 	return ret
 }
+
+/*
+给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+例如：
+给定二叉树 [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回锯齿形层次遍历如下：
+
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+*/
+func zigzagLevelOrder(root *TreeNode) [][]int {
+	return zigzagLevelOrderCurse(root, true)
+}
+
+func zigzagLevelOrderCurse(root *TreeNode, flag bool) [][]int {
+	if root == nil {
+		return nil
+	}
+	ret := make([][]int, 0)
+	ret = append(ret, []int{root.Val})
+	var leftRes, rightRes [][]int
+	nextFlag := !flag
+	if root.Left != nil {
+		leftRes = zigzagLevelOrderCurse(root.Left, nextFlag)
+	}
+	if root.Right != nil {
+		rightRes = zigzagLevelOrderCurse(root.Right, nextFlag)
+	}
+	if root.Left != nil && root.Right != nil {
+		merge := make([][]int, 0)
+		rLen := len(rightRes)
+		lLen := len(leftRes)
+		var maxLen int
+		if rLen > lLen {
+			maxLen = rLen
+		} else {
+			maxLen = lLen
+		}
+		for i := 0; i < maxLen; i++ {
+			var tmpmerge []int
+			if flag {
+				if i < lLen {
+					tmpmerge = leftRes[i]
+				}
+				if i < rLen {
+					if tmpmerge == nil {
+						tmpmerge = rightRes[i]
+					} else {
+						tmpmerge = append(tmpmerge, rightRes[i]...)
+					}
+				}
+			} else {
+				if i < rLen {
+					tmpmerge = rightRes[i]
+				}
+				if i < lLen {
+					if tmpmerge == nil {
+						tmpmerge = leftRes[i]
+					} else {
+						tmpmerge = append(tmpmerge, leftRes[i]...)
+					}
+				}
+			}
+			flag = !flag
+			merge = append(merge, tmpmerge)
+		}
+		ret = append(ret, merge...)
+	} else if root.Left != nil {
+		ret = append(ret, leftRes...)
+	} else if root.Right != nil {
+		ret = append(ret, rightRes...)
+	}
+	return ret
+}
