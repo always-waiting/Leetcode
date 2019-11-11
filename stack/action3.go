@@ -156,19 +156,25 @@ func decodeString(s string) string {
 	var repeat string
 	var ret string
 	var level int
+	var start bool
+	var numstr string
 	for _, val := range s {
 		str := string(val)
-		num, err := strconv.Atoi(str)
+		_, err := strconv.Atoi(str)
 		if err == nil {
-			stackNum.Push(num)
+			numstr = numstr + str
 			continue
 		} else {
 			if str == "[" {
+				start = true
 				if level > 0 {
 					stackStr.Push(repeat)
 				}
 				level++
 				repeat = ""
+				num, _ := strconv.Atoi(numstr)
+				numstr = ""
+				stackNum.Push(num)
 				continue
 			} else if str == "]" {
 				repeatNum := stackNum.Pop().Int()
@@ -180,10 +186,15 @@ func decodeString(s string) string {
 				if level > 0 {
 					repeat = stackStr.Pop().String() + tmp
 				} else {
+					start = false
 					ret = ret + tmp
 				}
 			} else {
-				repeat = repeat + str
+				if start {
+					repeat = repeat + str
+				} else {
+					ret = ret + str
+				}
 			}
 
 		}
