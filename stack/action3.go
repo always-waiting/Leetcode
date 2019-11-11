@@ -123,7 +123,7 @@ func preorderTraversal1(root *TreeNode) []int {
 */
 func dailyTemperatures(T []int) []int {
 	stack := Stack{}
-	ret := make([]int{}, len(T))
+	ret := make([]int, len(T))
 	var slice int
 	for i := len(T) - 1; i >= 0; i-- {
 		step := 1
