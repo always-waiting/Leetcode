@@ -36,15 +36,11 @@ import "strings"
 */
 func simplifyPath(path string) string {
 	stack := Stack{}
-	stack.Push("/")
+	//stack.Push("/")
 	paths := strings.Split(path, "/")
-	panic(len(paths))
 	for _, val := range paths {
 		if val == ".." {
-			tmp := stack.Pop().String()
-			if tmp == "/" {
-				stack.Push(tmp)
-			}
+			stack.Pop()
 		} else if val == "." {
 			continue
 		} else if val == "" {
@@ -59,5 +55,5 @@ func simplifyPath(path string) string {
 	for i := 0; i < len(ret)/2; i++ {
 		ret[i], ret[len(ret)-1-i] = ret[len(ret)-1-i], ret[i]
 	}
-	return strings.Join(ret, "/")
+	return "/" + strings.Join(ret, "/")
 }
