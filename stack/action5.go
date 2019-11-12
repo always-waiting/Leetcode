@@ -49,7 +49,7 @@ func minRemoveToMakeValid(s string) string {
 		}
 	}
 	if len(removeIdx) != 0 {
-		for i := len(removeIdx); i >= 0; i-- {
+		for i := len(removeIdx) - 1; i >= 0; i-- {
 			rets = append(rets[:removeIdx[i]], rets[removeIdx[i]+1:]...)
 		}
 	}
