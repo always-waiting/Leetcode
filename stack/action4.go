@@ -41,7 +41,7 @@ func evalRPN(tokens []string) int {
 		} else if val == "-" {
 			num1 := stack.Pop().Int()
 			num2 := stack.Pop().Int()
-			num = num1 - num2
+			num = num2 - num1
 		} else if val == "*" {
 			num1 := stack.Pop().Int()
 			num2 := stack.Pop().Int()
@@ -49,7 +49,7 @@ func evalRPN(tokens []string) int {
 		} else if val == "/" {
 			num1 := stack.Pop().Int()
 			num2 := stack.Pop().Int()
-			num = num1 / num2
+			num = num2 / num1
 		} else {
 			num, _ = strconv.Atoi(val)
 		}
