@@ -105,7 +105,11 @@ func (this *BSTIterator) Next() int {
 	node := this.stack.Pop()
 	val := node.val.(*TreeNode)
 	if val.Right != nil {
-		this.stack.Push(val.Right)
+		cur := val.Right
+		for cur != nil {
+			this.stack.Push(cur)
+			cur = cur.Left
+		}
 	}
 	return val.Val
 }
