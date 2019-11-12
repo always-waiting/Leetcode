@@ -266,11 +266,7 @@ func removeKdigits(num string, k int) string {
 	items := make([]rune, 0)
 	for _, val := range num {
 		len := len(items)
-		if len == 0 {
-			items = append(items, val)
-			continue
-		}
-		if items[len-1] > val {
+		for len > 0 && items[len-1] > val && k > 0 {
 			items = items[:len-1]
 			k--
 			len--
@@ -279,11 +275,11 @@ func removeKdigits(num string, k int) string {
 			items = append(items, val)
 		}
 	}
+	if k > 0 && len(items)-k >= 0 {
+		items = items[:len(items)-k]
+	}
 	if len(items) == 0 {
 		return "0"
-	}
-	if k > 0 {
-		items = items[:len(items)-k]
 	}
 	return string(items)
 }
