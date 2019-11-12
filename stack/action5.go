@@ -84,26 +84,28 @@ s 中只有小写英文字母和括号
 我们确保所有括号都是成对出现的
 */
 func reverseParentheses(s string) string {
-	rets := make([][]rune, 0)
+	rets := make([][]rune, 1)
 	runes := []rune("()")
-	idx := -1
+	idx := 0
 	for _, val := range s {
 		if val == runes[0] {
 			idx++
 			rets = append(rets, make([]rune, 0))
 		} else if val == runes[1] {
+			tmp := rets[idx]
 			idx--
+			if idx%2 == 1 {
+				rets[idx] = append(tmp, rets[idx]...)
+			} else {
+				rets[idx] = append(rets[idx], tmp...)
+			}
 		} else {
-			if idx%2 == 0 {
+			if idx%2 == 1 {
 				rets[idx] = append([]rune{val}, rets[idx]...)
 			} else {
 				rets[idx] = append(rets[idx], val)
 			}
 		}
 	}
-	var ret string
-	for _, val := range rets {
-		ret = ret + string(val)
-	}
-	return ret
+	return string(rets[0])
 }
