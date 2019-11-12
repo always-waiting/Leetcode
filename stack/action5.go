@@ -90,7 +90,11 @@ func reverseParentheses(s string) string {
 	for _, val := range s {
 		if val == runes[0] {
 			idx++
-			rets = append(rets, make([]rune, 0))
+			if len(rets) == idx {
+				rets = append(rets, make([]rune, 0))
+			} else {
+				rets[idx] = []rune{}
+			}
 		} else if val == runes[1] {
 			tmp := rets[idx]
 			idx--
