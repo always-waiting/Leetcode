@@ -201,3 +201,42 @@ func decodeString(s string) string {
 	}
 	return ret
 }
+
+func decodeString1(s string) string {
+	stackS := Stack{}
+	stackI := Stack{}
+	var multi int
+	var repeat string
+	for _, val := range s {
+		if isDigit(val) {
+			num, _ := strconv.Atoi(string(val))
+			multi = multi*10 + num
+		} else {
+			if string(val) == "[" {
+				stackI.Push(multi)
+				stackS.Push(repeat)
+				multi = 0
+				repeat = ""
+			} else if string(val) == "]" {
+				num := stackI.Pop().Int()
+				last_str := stackS.Pop().String()
+				cur_repeat := ""
+				for i := 0; i < num; i++ {
+					cur_repeat = cur_repeat + repeat
+				}
+				repeat = last_str + cur_repeat
+			} else {
+				repeat = repeat + string(val)
+			}
+		}
+	}
+	return repeat
+}
+
+func isDigit(r rune) bool {
+	arr := []rune("09")
+	if r >= arr[0] && r <= arr[1] {
+		return true
+	}
+	return false
+}
