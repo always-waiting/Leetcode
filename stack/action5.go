@@ -202,12 +202,13 @@ func validateStackSequences(pushed []int, popped []int) bool {
 			stack = append(stack, pushVal)
 			continue
 		}
-		if stack[len(stack)-1] == popped[0] {
-			stack[len(stack)-1] = pushVal
+		for len(stack) != 0 &&
+			len(popped) != 0 &&
+			stack[len(stack)-1] == popped[0] {
+			stack = stack[:len(stack)-1]
 			popped = popped[1:]
-		} else {
-			stack = append(stack, pushVal)
 		}
+		stack = append(stack, pushVal)
 	}
 	for len(popped) != 0 && stack[len(stack)-1] == popped[0] {
 		stack = stack[:len(stack)-1]
