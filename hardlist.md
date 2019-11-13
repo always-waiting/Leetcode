@@ -1,5 +1,4 @@
 # 习题记录
-[TOC]
 ## 栈
 ### [表现良好的最长时间段](https://leetcode-cn.com/problems/longest-well-performing-interval/)
 给你一份工作时间表 hours，上面记录着某一位员工每天的工作小时数。
