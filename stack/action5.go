@@ -151,7 +151,7 @@ func longestWPI(hours []int) int {
 		if len(stack) == 0 {
 			stack = append(stack, idx)
 		}
-		if stack[len(stack)-1] > val {
+		if presum[stack[len(stack)-1]] > val {
 			stack = append(stack, idx)
 		}
 	}
@@ -160,11 +160,15 @@ func longestWPI(hours []int) int {
 		if len(stack) == 0 {
 			break
 		}
-		if presum[i]-stack[len(stack)-1] > 0 {
-			tmp := stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-			if ans < i-tmp {
-				ans = i - tmp
+		for len(stack) != 0 {
+			if presum[i]-presum[stack[len(stack)-1]] > 0 {
+				tmp := stack[len(stack)-1]
+				stack = stack[:len(stack)-1]
+				if ans < i-tmp {
+					ans = i - tmp
+				}
+			} else {
+				break
 			}
 		}
 	}
