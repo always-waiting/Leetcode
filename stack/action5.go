@@ -130,21 +130,43 @@ func reverseParentheses(s string) string {
 0 <= hours[i] <= 16
 */
 func longestWPI(hours []int) int {
-	var h, l, total int
+	arr := make([]int, 0)
 	for _, val := range hours {
 		if val > 8 {
-			h++
+			arr = append(arr, 1)
 		} else {
-			l++
-		}
-		if h > l {
-			if total < h+l {
-				total = h + l
-			}
-		} else {
-			h = 0
-			l = 0
+			arr = append(arr, -1)
 		}
 	}
-	return total
+	presum := make([]int, len(arr)+1)
+	for i := 0; i <= len(arr); i++ {
+		if i == 0 {
+			presum[i] = 0
+		} else {
+			presum[i] = presum[i-1] + arr[i-1]
+		}
+	}
+	stack := make([]int, 0)
+	for idx, val := range presum {
+		if len(stack) == 0 {
+			stack = append(stack, idx)
+		}
+		if stack[len(stack)-1] > val {
+			stack = append(stack, idx)
+		}
+	}
+	ans := 0
+	for i := len(presum) - 1; i >= 0; i-- {
+		if len(stack) == 0 {
+			break
+		}
+		if presum[i]-stack[len(stack)-1] > 0 {
+			tmp := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			if ans < i-tmp {
+				ans = i - tmp
+			}
+		}
+	}
+	return ans
 }
