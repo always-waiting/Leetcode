@@ -24,7 +24,19 @@ func Test_Exercise1(t *testing.T) {
 		if isPalindrome(a) == true {
 			t.Log("检查正确")
 		} else {
-			t.Log("检查错误")
+			t.Errorf("检查错误")
 		}
+	}
+	{
+		t.Log("移除重复节点......")
+		aInt := []int{1, 2, 3, 3, 2, 1}
+		a := newListNode(aInt)
+		a = removeDuplicateNodes(a)
+		if a.String() != "1->2->3" {
+			t.Errorf("检查错误")
+		} else {
+			t.Log("检查正确")
+		}
+
 	}
 }

@@ -4,6 +4,7 @@ package list
 Content:
 1. 链表相交
 2. 回文链表
+3. 移除重复节点
 */
 
 /*
@@ -112,4 +113,72 @@ func isPalindrome(head *ListNode) bool {
 		rSlow = rSlow.Next
 	}
 	return true
+}
+
+/*
+移除重复节点
+
+编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+
+示例1:
+输入：[1, 2, 3, 3, 2, 1]
+输出：[1, 2, 3]
+
+示例2:
+输入：[1, 1, 1, 1, 2]
+输出：[1, 2]
+
+提示：
+链表长度在[0, 20000]范围内。
+链表元素在[0, 20000]范围内。
+
+进阶：
+如果不得使用临时缓冲区，该怎么解决？
+*/
+func removeDuplicateNodes(head *ListNode) *ListNode {
+	/*
+		// 使用了缓冲区,用一个指针记录前一个节点
+		// O(n)时间复杂度，O(n)空间复杂度
+		tmp := make(map[int]bool)
+		var pre *ListNode
+		l := head
+		for l != nil {
+			if _, ok := tmp[l.Val]; !ok {
+				tmp[l.Val] = true
+				pre = l
+				l = l.Next
+			} else {
+				l = l.Next
+				pre.Next = l
+			}
+		}
+		return head
+	*/
+	// 不用缓存区，O(n*n)时间复杂度，O(1)空间复杂度
+	var pre *ListNode
+	l := head
+	for l != nil {
+		if pre == nil {
+			pre = l
+			l = l.Next
+		} else {
+			tmp := head
+			has := false
+			for tmp != pre.Next {
+				if tmp.Val == l.Val {
+					has = true
+					break
+				}
+				tmp = tmp.Next
+			}
+			if has {
+				pre.Next = l.Next
+				l = l.Next
+			} else {
+				pre = l
+				l = l.Next
+			}
+		}
+	}
+	return head
 }
