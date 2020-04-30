@@ -51,4 +51,14 @@ func Test_Exercise1(t *testing.T) {
 			t.Log("检查正确")
 		}
 	}
+	{
+		t.Log("返回倒数第k个节点......")
+		aInt := []int{1, 2, 3, 4, 5}
+		a := newListNode(aInt)
+		if kthToLast(a, 2) != 4 {
+			t.Errorf("检查错误")
+		} else {
+			t.Log("检查正确")
+		}
+	}
 }

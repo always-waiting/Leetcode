@@ -7,6 +7,7 @@ Content:
 3. 移除重复节点
 4. 删除中间节点 -- start1
 5. 两个链表的第一个公共节点 -- same to 链表相交
+6. 返回倒数第k个节点
 */
 
 /*
@@ -251,4 +252,44 @@ B:     1 - 5
 */
 func getIntersectionNode0(headA, headB *ListNode) *ListNode {
 	return getIntersectionNode(headA, headB)
+}
+
+/*
+返回倒数第k个节点
+
+实现一种算法，找出单向链表中倒数第k个节点。返回该节点的值。
+
+注意：本题相对原题稍作改动
+示例：
+输入： 1->2->3->4->5 和 k = 2
+输出： 4
+
+说明：
+给定的 k 保证是有效的。
+*/
+func kthToLast(head *ListNode, k int) int {
+	/*
+		r := head.Reverse()
+		count := 1
+		var ret int
+		for r != nil {
+			if count == k {
+				ret = r.Val
+			}
+			count++
+			r = r.Next
+		}
+		return ret
+	*/
+	// 双指针
+	l := head
+	for k > 0 {
+		l = l.Next
+		k--
+	}
+	for l != nil {
+		l = l.Next
+		head = head.Next
+	}
+	return head.Val
 }
