@@ -61,4 +61,14 @@ func Test_Exercise1(t *testing.T) {
 			t.Log("检查正确")
 		}
 	}
+	{
+		t.Log("二进制链表转整数......")
+		aInt := []int{1, 0, 1}
+		a := newListNode(aInt)
+		if getDecimalValue(a) != 5 {
+			t.Errorf("检查错误")
+		} else {
+			t.Log("检查正确")
+		}
+	}
 }
