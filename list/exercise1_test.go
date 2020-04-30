@@ -39,4 +39,16 @@ func Test_Exercise1(t *testing.T) {
 		}
 
 	}
+	{
+		t.Log("删除中间节点......")
+		aInt := []int{4, 5, 1, 9}
+		a := newListNode(aInt)
+		num5 := a.Next
+		deleteNode(num5)
+		if a.String() != "4->1->9" {
+			t.Errorf("检查错误")
+		} else {
+			t.Log("检查正确")
+		}
+	}
 }
