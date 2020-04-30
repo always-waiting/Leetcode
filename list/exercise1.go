@@ -3,6 +3,7 @@ package list
 /*
 Content:
 1. 链表相交
+2. 回文链表
 */
 
 /*
@@ -52,4 +53,63 @@ func getIntersectionNode(headA, headB *ListNode) *ListNode {
 		}
 	}
 	return h1
+}
+
+/*
+回文链表
+
+编写一个函数，检查输入的链表是否是回文的。
+
+示例 1：
+输入： 1->2
+输出： false
+
+示例 2：
+输入： 1->2->2->1
+输出： true
+
+进阶：
+你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+*/
+func isPalindrome(head *ListNode) bool {
+	/*
+		if head == nil {
+			return true
+		}
+		// O(n)空间复杂度,O(n)时间复杂度
+		l := head.Reverse()
+		for head != nil {
+			if head.Val != l.Val {
+				return false
+			}
+			head = head.Next
+			l = l.Next
+		}
+		return true
+	*/
+	// 快慢指针，寻找中间位置，反转查看
+	if head == nil || head.Next == nil {
+		return true
+	}
+	slow := head
+	fast := head
+	var rSlow *ListNode
+	for fast != nil && fast.Next != nil {
+		tmp := slow
+		fast = fast.Next.Next
+		slow = slow.Next
+		tmp.Next = rSlow
+		rSlow = tmp
+	}
+	if fast != nil {
+		slow = slow.Next
+	}
+	for slow != nil {
+		if slow.Val != rSlow.Val {
+			return false
+		}
+		slow = slow.Next
+		rSlow = rSlow.Next
+	}
+	return true
 }

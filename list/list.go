@@ -1,8 +1,39 @@
 package list
 
+import (
+	"fmt"
+	"strings"
+)
+
 type ListNode struct {
 	Val  int
 	Next *ListNode
+}
+
+func (this *ListNode) String() string {
+	if this == nil {
+		return ""
+	}
+	a := []string{}
+	l := this
+	for l != nil {
+		a = append(a, fmt.Sprintf("%d", l.Val))
+		l = l.Next
+	}
+	return strings.Join(a, "->")
+}
+
+func (this *ListNode) Reverse() *ListNode {
+	var ret *ListNode
+	for this != nil {
+		tmp := &ListNode{
+			Val:  this.Val,
+			Next: ret,
+		}
+		ret = tmp
+		this = this.Next
+	}
+	return ret
 }
 
 func newListNode(data []int) *ListNode {
