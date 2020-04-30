@@ -249,7 +249,7 @@ func reverseBetween2(head *ListNode, m int, n int) *ListNode {
 输入: 1->1->1->2->3
 输出: 2->3
 */
-func deleteDuplicates(head *ListNode) *ListNode {
+func deleteDuplicates3(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}

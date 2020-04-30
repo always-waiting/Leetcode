@@ -172,6 +172,7 @@ func oddEvenList(head *ListNode) *ListNode {
 输入: -1->5->3->4->0
 输出: -1->0->3->4->5
 */
+/*
 func insertionSortList(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
@@ -206,6 +207,7 @@ func insertionSortList(head *ListNode) *ListNode {
 	}
 	return head
 }
+*/
 
 /*
 给定两个非空链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储单个数字。将这两数相加会返回一个新的链表。

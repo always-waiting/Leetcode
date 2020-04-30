@@ -13,7 +13,7 @@ package list
 输出：7 -> 0 -> 8
 原因：342 + 465 = 807
 */
-func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+func addTwoNumbers1(l1 *ListNode, l2 *ListNode) *ListNode {
 	ret := &ListNode{}
 	tmp := ret
 	overflow := 0
