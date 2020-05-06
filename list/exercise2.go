@@ -4,6 +4,7 @@ package list
 Contents:
 1. 环路检测[detectCycle]	--	★
 2. 二叉树中的列表[isSubPath]	--	★★★
+3. 分割链表[partition]
 */
 
 /*
@@ -105,4 +106,43 @@ func isSamePath(head *ListNode, root *TreeNode) bool {
 		return isSamePath(head.Next, root.Left) || isSamePath(head.Next, root.Right)
 	}
 	return false
+}
+
+/*
+分割链表
+
+编写程序以 x 为基准分割链表，使得所有小于 x 的节点排在大于或等于 x 的节点之前。如果链表中包含 x，x 只需出现在小于 x 的元素之后(如下所示)。
+分割元素 x 只需处于“右半部分”即可，其不需要被置于左右两部分之间。
+
+示例:
+输入: head = 3->5->8->5->10->2->1, x = 5
+输出: 3->1->2->10->5->5->8
+*/
+func partition(head *ListNode, x int) *ListNode {
+	var left, right *ListNode
+	for head != nil {
+		if head.Val >= x {
+			tmp := head.Next
+			head.Next = right
+			right = head
+			head = tmp
+		} else {
+			tmp := head.Next
+			head.Next = left
+			left = head
+			head = tmp
+		}
+	}
+	l := left
+	for l != nil {
+		if l.Next == nil {
+			l.Next = right
+			break
+		}
+		l = l.Next
+	}
+	if left == nil {
+		return right
+	}
+	return left
 }
