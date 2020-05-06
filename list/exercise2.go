@@ -7,6 +7,7 @@ Contents:
 3. 分割链表[partition]
 4. 扁平化多级双向链表[flatten]	--	★
 5. 链表求和[addTwoNumbers]
+6. 复杂链表的复制[copyRandomList]	--	★★
 */
 
 /*
@@ -264,6 +265,106 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	if carry != 0 {
 		l.Next = &ListNode{Val: carry}
+	}
+	return ret
+}
+
+/*
+复杂链表的复制
+
+请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
+
+示例 1：
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+示例 2：
+输入：head = [[1,1],[2,1]]
+输出：[[1,1],[2,1]]
+
+提示：
+-10000 <= Node.val <= 10000
+Node.random 为空（null）或指向链表中的节点。
+节点数目不超过 1000
+
+注意：本题与主站 138 题相同：https://leetcode-cn.com/problems/copy-list-with-random-pointer/
+*/
+
+func copyRandomList(head *Node1) *Node1 {
+	/*
+		// hash法，空间复杂度高
+		var pre, ret *Node1
+		l := head
+		for l != nil {
+			if ret == nil {
+				ret = &Node1{Val: l.Val}
+				pre = ret
+				l = l.Next
+			} else {
+				pre.Next = &Node1{Val: l.Val}
+				l = l.Next
+				pre = pre.Next
+			}
+		}
+		l = head
+		rl := ret
+		for l != nil {
+			if l.Random != nil {
+				il := head
+				count := 0
+				for il != nil {
+					if il == l.Random {
+						break
+					}
+					count++
+					il = il.Next
+				}
+				irl := ret
+				for irl != nil {
+					if count == 0 {
+						rl.Random = irl
+					}
+					count--
+					irl = irl.Next
+				}
+			}
+			l = l.Next
+			rl = rl.Next
+		}
+		return ret
+	*/
+	l := head
+	// 2倍链表
+	for l != nil {
+		tmp := &Node1{Val: l.Val}
+		nTmp := l.Next
+		l.Next = tmp
+		tmp.Next = nTmp
+		l = nTmp
+	}
+	// l.Next.Random = l.Random.Next
+	l = head
+	for l != nil {
+		if l.Random != nil {
+			l.Next.Random = l.Random.Next
+		}
+		l = l.Next.Next
+	}
+	// 把链表拆分成2个
+	var pre, ret *Node1
+	l = head
+	for l != nil {
+		tmp := l
+		if ret == nil {
+			ret = l.Next
+			pre = ret
+			l = l.Next.Next
+		} else {
+			pre.Next = l.Next
+			pre = pre.Next
+			l = l.Next.Next
+		}
+		tmp.Next = l
 	}
 	return ret
 }

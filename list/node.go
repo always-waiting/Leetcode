@@ -54,3 +54,9 @@ func createNode1(in []interface{}) *Node {
 	}
 	return ret
 }
+
+type Node1 struct {
+	Val    int
+	Next   *Node1
+	Random *Node1
+}
