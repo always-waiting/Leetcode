@@ -6,6 +6,7 @@ Contents:
 2. 二叉树中的列表[isSubPath]	--	★★★
 3. 分割链表[partition]
 4. 扁平化多级双向链表[flatten]	--	★
+5. 链表求和[addTwoNumbers]
 */
 
 /*
@@ -218,4 +219,51 @@ func flatten(root *Node) *Node {
 		}
 	}
 	return root
+}
+
+/*
+链表求和
+
+给定两个用链表表示的整数，每个节点包含一个数位。
+这些数位是反向存放的，也就是个位排在链表首部。
+编写函数对这两个整数求和，并用链表形式返回结果。
+
+示例：
+输入：(7 -> 1 -> 6) + (5 -> 9 -> 2)，即617 + 295
+输出：2 -> 1 -> 9，即912
+进阶：假设这些数位是正向存放的，请再做一遍。
+
+示例：
+输入：(6 -> 1 -> 7) + (2 -> 9 -> 5)，即617 + 295
+输出：9 -> 1 -> 2，即912
+*/
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	var ret *ListNode
+	var carry int
+	var l *ListNode
+	for l1 != nil || l2 != nil {
+		var a1, a2 int
+		if l1 != nil {
+			a1 = l1.Val
+			l1 = l1.Next
+		}
+		if l2 != nil {
+			a2 = l2.Val
+			l2 = l2.Next
+		}
+		val := (a1 + a2 + carry) % 10
+		carry = (a1 + a2 + carry) / 10
+		tmp := &ListNode{Val: val}
+		if ret == nil {
+			ret = tmp
+			l = ret
+		} else {
+			l.Next = tmp
+			l = tmp
+		}
+	}
+	if carry != 0 {
+		l.Next = &ListNode{Val: carry}
+	}
+	return ret
 }
