@@ -30,4 +30,15 @@ func Test_Exercise2(t *testing.T) {
 			t.Errorf("检查错误")
 		}
 	}
+	{
+		t.Log("扁平化多级双向链表......")
+		nodeVal := []interface{}{1, 2, 3, 4, 5, 6, nil, nil, nil, 7, 8, 9, 10, nil, nil, 11, 12}
+		node := createNode1(nodeVal)
+		node = flatten(node)
+		if node.SimpleString() == "1->2->3->7->8->11->12->9->10->4->5->6" {
+			t.Log("检查正确")
+		} else {
+			t.Errorf("检查错误: %s", node.SimpleString())
+		}
+	}
 }
