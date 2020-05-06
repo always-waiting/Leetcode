@@ -1,14 +1,17 @@
 package list
 
 /*
-Content:
-1. 链表相交
-2. 回文链表
-3. 移除重复节点
-4. 删除中间节点 -- start1
-5. 两个链表的第一个公共节点 -- same to 链表相交
-6. 返回倒数第k个节点
-7. 二进制链表转整数
+Contents:
+1. 链表相交[getIntersectionNode]
+2. 回文链表[isPalindrome]
+3. 移除重复节点[removeDuplicateNodes]
+4. 删除中间节点[deleteNode]	--	★
+5. 两个链表的第一个公共节点[getIntersectionNode0]	--	same to 链表相交
+6. 返回倒数第k个节点[kthToLast]
+7. 二进制链表转整数[getDecimalValue]
+8. 删除链表的节点[deleteNodeWithValue]
+9. 反转链表[reverseList]
+10.链表中倒数第k个节点[getKthFromEnd]	--	same to 返回倒数第k个节点
 */
 
 /*
@@ -338,4 +341,93 @@ func getDecimalValue(head *ListNode) int {
 		head = head.Next
 	}
 	return ret
+}
+
+/*
+删除链表的节点
+
+给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+返回删除后的链表的头节点。
+注意：此题对比原题有改动
+
+示例 1:
+输入: head = [4,5,1,9], val = 5
+输出: [4,1,9]
+解释: 给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9.
+
+示例 2:
+输入: head = [4,5,1,9], val = 1
+输出: [4,5,9]
+解释: 给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9.
+
+说明：
+题目保证链表中节点的值互不相同
+若使用 C 或 C++ 语言，你不需要 free 或 delete 被删除的节点
+*/
+func deleteNodeWithValue(head *ListNode, val int) *ListNode {
+	l := head
+	var pre *ListNode
+	for l != nil {
+		if l.Val != val {
+			pre = l
+			l = l.Next
+			continue
+		}
+		if l.Next == nil {
+			pre.Next = nil
+			l = nil
+		} else {
+			*l = *l.Next
+		}
+	}
+	return head
+}
+
+/*
+反转链表
+
+定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+
+示例:
+输入: 1->2->3->4->5->NULL
+输出: 5->4->3->2->1->NULL
+
+限制：
+0 <= 节点个数 <= 5000
+注意：本题与主站 206 题相同：https://leetcode-cn.com/problems/reverse-linked-list/
+*/
+func reverseList(head *ListNode) *ListNode {
+	var pre *ListNode
+	for head != nil {
+		tmp := head.Next
+		head.Next = pre
+		pre = head
+		head = tmp
+	}
+	return pre
+}
+
+/*
+链表中倒数第k个节点
+
+输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，
+本题从1开始计数，即链表的尾节点是倒数第1个节点。例如，一个链表有6个节点，
+从头节点开始，它们的值依次是1、2、3、4、5、6。这个链表的倒数第3个节点是值为4的节点。
+
+
+示例：
+给定一个链表: 1->2->3->4->5, 和 k = 2.
+返回链表 4->5.
+*/
+func getKthFromEnd(head *ListNode, k int) *ListNode {
+	last := head
+	for k > 0 {
+		last = last.Next
+		k--
+	}
+	for last != nil {
+		head = head.Next
+		last = last.Next
+	}
+	return head
 }
