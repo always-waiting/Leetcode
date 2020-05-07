@@ -63,7 +63,7 @@ func (this *MinStack) GetMin() int {
 	return *this.min
 }
 */
-type MinStack struct {
+type MinStack struct { // 双栈使得pop和push能够以O(1)进行处理
 	stack    []int
 	minFuzhu []int
 }
