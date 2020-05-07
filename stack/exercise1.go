@@ -3,6 +3,7 @@ package stack
 /*
 Contents:
 1. 栈的最小值	--	★★
+2. 滑动窗口的最大值[Not Finished]	--	★★★★
 */
 
 /*
@@ -19,49 +20,6 @@ minStack.getMin();   --> 返回 -3.
 minStack.pop();
 minStack.top();      --> 返回 0.
 minStack.getMin();   --> 返回 -2.
-*/
-/*
-type MinStack struct {
-	data []int
-	min  *int
-}
-
-func Constructor() MinStack {
-	return MinStack{data: make([]int, 0)}
-}
-
-func (this *MinStack) Push(x int) {
-	this.data = append(this.data, x)
-	if this.min == nil || *this.min > x {
-		this.min = &x
-	}
-}
-
-func (this *MinStack) Pop() {
-	i := this.data[len(this.data)-1]
-	this.data = this.data[0 : len(this.data)-1]
-	if len(this.data) == 0 {
-		this.min = nil
-		return
-	}
-	if i == *this.min {
-		this.min = &this.data[0]
-		for _, val := range this.data {
-			if *this.min > val {
-				a := val
-				this.min = &a
-			}
-		}
-	}
-}
-
-func (this *MinStack) Top() int {
-	return this.data[len(this.data)-1]
-}
-
-func (this *MinStack) GetMin() int {
-	return *this.min
-}
 */
 type MinStack struct { // 双栈使得pop和push能够以O(1)进行处理
 	stack    []int
@@ -98,4 +56,37 @@ func (this *MinStack) Top() int {
 
 func (this *MinStack) GetMin() int {
 	return this.minFuzhu[len(this.minFuzhu)-1]
+}
+
+/*
+滑动窗口的最大值
+
+给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
+
+示例:
+输入: nums = [1,3,-1,-3,5,3,6,7], 和 k = 3
+输出: [3,3,5,5,6,7]
+解释:
+  滑动窗口的位置                最大值
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+
+提示：
+你可以假设 k 总是有效的，在输入数组不为空的情况下，1 ≤ k ≤ 输入数组的大小。
+注意：本题与主站 239 题相同：https://leetcode-cn.com/problems/sliding-window-maximum/
+*/
+func maxSlidingWindow(nums []int, k int) []int {
+	if k == 0 || nums == nil {
+		return nil
+	}
+	if k == 1 {
+		return nums
+	}
+	ret := make([]int, len(nums)-k+1)
+	return ret
 }
