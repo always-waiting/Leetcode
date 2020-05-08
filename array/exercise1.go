@@ -14,6 +14,7 @@ Contents:
 2. 删除排序数组中的重复项[removeDuplicates]	--	★
 3. 移除元素[removeElement]
 4. 搜索插入位置[searchInsert]
+5. 最大子序和[maxSumArray]	--	★★★
 */
 
 /*
@@ -181,4 +182,33 @@ func searchInsert(nums []int, target int) int {
 		j++
 	}
 	return j
+}
+
+/*
+最大子序和
+
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+示例:
+输入: [-2,1,-3,4,-1,2,1,-5,4],
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+进阶:
+如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解。
+*/
+func maxSubArray(nums []int) int { // Kadane算法
+	maxEndHere := nums[0]
+	maxSoFar := nums[0]
+	for _, val := range nums[1:] {
+		tmp := maxEndHere + val
+		if val > tmp {
+			maxEndHere = val
+		} else {
+			maxEndHere = tmp
+		}
+		if maxSoFar < maxEndHere {
+			maxSoFar = maxEndHere
+		}
+	}
+	return maxSoFar
 }
