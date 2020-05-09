@@ -17,6 +17,7 @@ Contents:
 5. 最大子序和[maxSumArray]	--	★★★
 6. 加一[plusOne]
 7. 合并两个有序数组[merge]	--	★
+8. 杨辉三角[generate]
 */
 
 /*
@@ -287,4 +288,42 @@ func merge(nums1 []int, m int, nums2 []int, n int) {
 		}
 		last--
 	}
+}
+
+/*
+杨辉三角
+
+在杨辉三角中，每个数是它左上方和右上方的数的和。
+
+示例:
+输入: 5
+输出:
+[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]
+*/
+func generate(numRows int) [][]int {
+	ret := make([][]int, numRows)
+	level := 0
+	for level != numRows {
+		if level == 0 {
+			ret[level] = []int{1}
+			level++
+			continue
+		}
+		ret[level] = make([]int, level+1)
+		for i := 0; i < level+1; i++ {
+			if i == 0 || i == level {
+				ret[level][i] = 1
+			} else {
+				ret[level][i] = ret[level-1][i-1] + ret[level-1][i]
+			}
+		}
+		level++
+	}
+	return ret
 }
