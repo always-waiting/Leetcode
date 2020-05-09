@@ -18,6 +18,7 @@ Contents:
 6. 加一[plusOne]
 7. 合并两个有序数组[merge]	--	★
 8. 杨辉三角[generate]
+9. 杨辉三角II
 */
 
 /*
@@ -324,6 +325,40 @@ func generate(numRows int) [][]int {
 			}
 		}
 		level++
+	}
+	return ret
+}
+
+/*
+杨辉三角II
+在杨辉三角中，每个数是它左上方和右上方的数的和。
+
+示例:
+
+输入: 3
+输出: [1,3,3,1]
+进阶：
+
+你可以优化你的算法到 O(k) 空间复杂度吗？
+*/
+func getRow(rowIndex int) []int {
+	if rowIndex == 0 {
+		return []int{1}
+	}
+	ret := make([]int, rowIndex+1)
+	var tmp int
+	for rowIndex >= 0 {
+		for i := 0; i < len(ret)-rowIndex; i++ {
+			if i == 0 || i == len(ret)-rowIndex-1 {
+				ret[i] = 1
+				tmp = ret[i]
+			} else {
+				a := tmp + ret[i]
+				tmp = ret[i]
+				ret[i] = a
+			}
+		}
+		rowIndex--
 	}
 	return ret
 }
