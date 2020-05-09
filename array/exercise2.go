@@ -2,7 +2,8 @@ package array
 
 /*
 Contents
-1. 买卖股票的最佳时机II
+1. 买卖股票的最佳时机II[maxProfit]
+2. 两数之和 II - 输入有序数组[twoSum]	--	★
 */
 
 /*
@@ -50,4 +51,48 @@ func maxProfit(prices []int) int {
 	}
 	ret = ret + lastPrice - inPrice
 	return ret
+}
+
+/*
+两数之和 II - 输入有序数组
+
+给定一个已按照升序排列的有序数组，找到两个数使得它们相加之和等于目标数。
+函数应该返回这两个下标值index1和index2，其中index1必须小于index2。
+
+说明:
+返回的下标值（index1 和 index2）不是从零开始的。
+你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。
+
+示例:
+输入: numbers = [2, 7, 11, 15], target = 9
+输出: [1,2]
+解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+*/
+func twoSum(numbers []int, target int) []int {
+	/*
+		// 速度慢!
+		ret := make([]int, 0)
+		for i, vali := range numbers {
+			for j, valj := range numbers[i+1:] {
+				if vali+valj == target {
+					ret = append(ret, i+1, i+j+2)
+					return ret
+				}
+			}
+		}
+		return ret
+	*/
+	// 双指针
+	start := 0
+	end := len(numbers) - 1
+	for start < end {
+		if numbers[start]+numbers[end] == target {
+			return []int{start + 1, end + 1}
+		} else if numbers[start]+numbers[end] < target {
+			start++
+		} else {
+			end--
+		}
+	}
+	return []int{}
 }
