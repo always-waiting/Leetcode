@@ -4,6 +4,7 @@ package array
 Contents
 1. 买卖股票的最佳时机II[maxProfit]
 2. 两数之和 II - 输入有序数组[twoSum]	--	★
+3. 多数元素[majorityElement]	--	★
 */
 
 /*
@@ -95,4 +96,36 @@ func twoSum(numbers []int, target int) []int {
 		}
 	}
 	return []int{}
+}
+
+/*
+多数元素
+
+给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数大于 ⌊ n/2 ⌋ 的元素。
+你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+
+示例 1:
+输入: [3,2,3]
+输出: 3
+
+示例 2:
+输入: [2,2,1,1,1,2,2]
+输出: 2
+*/
+func majorityElement(nums []int) int {
+	// 摩尔
+	count := 1
+	ret := nums[0]
+	for _, val := range nums[1:] {
+		if val != ret {
+			count--
+			if count == 0 {
+				ret = val
+				count++
+			}
+		} else {
+			count++
+		}
+	}
+	return ret
 }
