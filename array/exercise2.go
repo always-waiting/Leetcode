@@ -6,6 +6,8 @@ Contents
 2. 两数之和 II - 输入有序数组[twoSum]	--	★
 3. 多数元素[majorityElement]	--	★
 4. 旋转数组[rotate]
+5. 存在重复元素[containsDuplicate]
+6. 存在重复元素II[containsNearbyDuplicate]
 */
 
 /*
@@ -184,4 +186,61 @@ func reverse(nums []int, start, end int) {
 		start++
 		end--
 	}
+}
+
+/*
+存在重复元素
+
+给定一个整数数组，判断是否存在重复元素。
+如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
+
+示例 1:
+输入: [1,2,3,1]
+输出: true
+
+示例 2:
+输入: [1,2,3,4]
+输出: false
+
+示例 3:
+输入: [1,1,1,3,3,4,3,2,4,2]
+输出: true
+*/
+func containsDuplicate(nums []int) bool {
+	for i := 0; i < len(nums); i++ {
+		for j := i + 1; j < len(nums); j++ {
+			if nums[i] == nums[j] {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+/*
+存在重复元素II
+
+给定一个整数数组和一个整数k，判断数组中是否存在两个不同的索引i和j，使得nums[i] = nums[j]，并且i和j的差的绝对值至多为k。
+
+示例 1:
+输入: nums = [1,2,3,1], k = 3
+输出: true
+
+示例 2:
+输入: nums = [1,0,1,1], k = 1
+输出: true
+
+示例 3:
+输入: nums = [1,2,3,1,2,3], k = 2
+输出: false
+*/
+func containsNearbyDuplicate(nums []int, k int) bool {
+	for i := 0; i < len(nums); i++ {
+		for j := i + 1; j < len(nums); j++ {
+			if nums[i] == nums[j] && j-i <= k {
+				return true
+			}
+		}
+	}
+	return false
 }
