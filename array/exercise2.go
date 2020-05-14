@@ -5,6 +5,7 @@ Contents
 1. 买卖股票的最佳时机II[maxProfit]
 2. 两数之和 II - 输入有序数组[twoSum]	--	★
 3. 多数元素[majorityElement]	--	★
+4. 旋转数组[rotate]
 */
 
 /*
@@ -128,4 +129,59 @@ func majorityElement(nums []int) int {
 		}
 	}
 	return ret
+}
+
+/*
+旋转数组
+
+给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+
+示例 1:
+输入: [1,2,3,4,5,6,7] 和 k = 3
+输出: [5,6,7,1,2,3,4]
+解释:
+向右旋转 1 步: [7,1,2,3,4,5,6]
+向右旋转 2 步: [6,7,1,2,3,4,5]
+向右旋转 3 步: [5,6,7,1,2,3,4]
+
+示例 2:
+输入: [-1,-100,3,99] 和 k = 2
+输出: [3,99,-1,-100]
+解释:
+向右旋转 1 步: [99,-1,-100,3]
+向右旋转 2 步: [3,99,-1,-100]
+
+说明:
+尽可能想出更多的解决方案，至少有三种不同的方法可以解决这个问题。
+要求使用空间复杂度为O(1)的原地算法。
+*/
+func rotate(nums []int, k int) {
+	l := k % len(nums)
+	if l == 0 {
+		return
+	}
+	reverse(nums, 0, len(nums)-1)
+	reverse(nums, 0, l-1)
+	reverse(nums, l, len(nums)-1)
+	/*
+		num := len(nums)
+		tmp := make([]int, l)
+		copy(tmp, nums[num-l:])
+		for i := num - l - 1; i >= 0; i-- {
+			nums[i+l] = nums[i]
+		}
+		for i := 0; i < l; i++ {
+			nums[i] = tmp[i]
+		}
+	*/
+}
+
+func reverse(nums []int, start, end int) {
+	for start < end {
+		tmp := nums[start]
+		nums[start] = nums[end]
+		nums[end] = tmp
+		start++
+		end--
+	}
 }
