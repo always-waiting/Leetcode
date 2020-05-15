@@ -11,6 +11,7 @@ Contents
 7. 缺失数字[missingNumber]
 8. 移动零[moveZeroes]
 9. 第三大的数[thirdMax]
+10.找到所有数组中消失的数字[findDisappearedNumbers]	--	★
 */
 
 /*
@@ -380,4 +381,38 @@ func thirdMax(nums []int) int {
 		return stack[2]
 	}
 	return stack[0]
+}
+
+/*
+找到所有数组中消失的数字
+
+给定一个范围在  1 ≤ a[i] ≤ n ( n = 数组大小 ) 的 整型数组，数组中的元素一些出现了两次，另一些只出现一次。
+找到所有在 [1, n] 范围之间没有出现在数组中的数字。
+您能在不使用额外空间且时间复杂度为O(n)的情况下完成这个任务吗? 你可以假定返回的数组不算在额外空间内。
+
+示例:
+输入:
+[4,3,2,7,8,2,3,1]
+输出:
+[5,6]
+*/
+func findDisappearedNumbers(nums []int) []int {
+	ret := []int{}
+	for _, val := range nums {
+		var idx int
+		if val < 0 {
+			idx = -1 - val
+		} else {
+			idx = val - 1
+		}
+		if nums[idx] > 0 {
+			nums[idx] = nums[idx] * -1
+		}
+	}
+	for idx, _ := range nums {
+		if nums[idx] > 0 {
+			ret = append(ret, idx+1)
+		}
+	}
+	return ret
 }
