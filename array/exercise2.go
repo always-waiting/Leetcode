@@ -10,6 +10,7 @@ Contents
 6. 存在重复元素II[containsNearbyDuplicate]
 7. 缺失数字[missingNumber]
 8. 移动零[moveZeroes]
+9. 第三大的数[thirdMax]
 */
 
 /*
@@ -311,4 +312,72 @@ func moveZeroes(nums []int) {
 		nums[j] = 0
 		j++
 	}
+}
+
+/*
+第三大的数
+
+给定一个非空数组，返回此数组中第三大的数。如果不存在，则返回数组中最大的数。要求算法时间复杂度必须是O(n)。
+
+示例 1:
+输入: [3, 2, 1]
+输出: 1
+解释: 第三大的数是 1.
+
+示例 2:
+输入: [1, 2]
+输出: 2
+解释: 第三大的数不存在, 所以返回最大的数 2 .
+
+示例 3:
+输入: [2, 2, 3, 1]
+输出: 1
+解释: 注意，要求返回第三大的数，是指第三大且唯一出现的数。
+存在两个值为2的数，它们都排第二。
+*/
+func thirdMax(nums []int) int {
+	stack := []int{}
+	for _, val := range nums {
+		if len(stack) == 0 {
+			stack = append(stack, val)
+		} else if len(stack) == 1 {
+			if stack[0] < val {
+				stack = append(stack, stack[0])
+				stack[0] = val
+			} else if stack[0] == val {
+			} else {
+				stack = append(stack, val)
+			}
+		} else if len(stack) == 2 {
+			if stack[0] < val {
+				stack = append(stack, stack[1])
+				stack[1] = stack[0]
+				stack[0] = val
+			} else if stack[0] == val {
+			} else if stack[1] < val {
+				stack = append(stack, stack[1])
+				stack[1] = val
+			} else if stack[1] == val {
+			} else {
+				stack = append(stack, val)
+			}
+		} else {
+			if stack[0] < val {
+				stack[2] = stack[1]
+				stack[1] = stack[0]
+				stack[0] = val
+			} else if stack[0] == val {
+			} else if stack[1] < val {
+				stack[2] = stack[1]
+				stack[1] = val
+			} else if stack[1] == val {
+			} else if stack[2] < val {
+				stack[2] = val
+			}
+		}
+	}
+	if len(stack) == 3 {
+		return stack[2]
+	}
+	return stack[0]
 }
