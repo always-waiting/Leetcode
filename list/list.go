@@ -1,8 +1,89 @@
 package list
 
+import (
+	"fmt"
+	"strings"
+)
+
 type ListNode struct {
 	Val  int
 	Next *ListNode
+}
+
+func (this *ListNode) String() string {
+	if this == nil {
+		return ""
+	}
+	a := []string{}
+	l := this
+	startCycle := this.detectCycle()
+	if startCycle != nil {
+		for l != startCycle {
+			if l != startCycle {
+				a = append(a, fmt.Sprintf("%d", l.Val))
+				l = l.Next
+			}
+		}
+		tmp := []string{}
+		for {
+			tmp = append(tmp, fmt.Sprintf("%d", l.Val))
+			l = l.Next
+			if l == startCycle {
+				break
+			}
+		}
+		a = append(a, "["+strings.Join(tmp, "->")+"]", "...")
+	} else {
+		for l != nil {
+			a = append(a, fmt.Sprintf("%d", l.Val))
+			l = l.Next
+		}
+	}
+	return strings.Join(a, "->")
+}
+
+func (this *ListNode) hasCycle() bool {
+	s := this
+	f := this
+	for s != nil && f != nil && f.Next != nil {
+		s = s.Next
+		f = f.Next.Next
+		if s == f {
+			return true
+		}
+	}
+	return false
+}
+
+func (this *ListNode) detectCycle() *ListNode {
+	slow := this
+	fast := this
+	for fast != nil && fast.Next != nil && slow != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+		if fast == slow {
+			fast = this
+			for fast != slow {
+				fast = fast.Next
+				slow = slow.Next
+			}
+			return slow
+		}
+	}
+	return nil
+}
+
+func (this *ListNode) Reverse() *ListNode {
+	var ret *ListNode
+	for this != nil {
+		tmp := &ListNode{
+			Val:  this.Val,
+			Next: ret,
+		}
+		ret = tmp
+		this = this.Next
+	}
+	return ret
 }
 
 func newListNode(data []int) *ListNode {
