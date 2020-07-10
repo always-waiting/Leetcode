@@ -48,3 +48,12 @@ func Test_maxProfit(t *testing.T) {
 		t.Errorf("最佳买卖股票时机含冷冻期结果错误: got(%d), expecet(%d)", ret, 3)
 	}
 }
+
+func Test_findLength(t *testing.T) {
+	a := []int{1, 2, 3, 2, 1}
+	b := []int{3, 2, 1, 4, 7}
+	ret := findLength(a, b)
+	if ret != 3 {
+		t.Errorf("最长重复子数组结果错误: got(%d), expect(%d)", ret, 3)
+	}
+}

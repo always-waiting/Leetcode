@@ -8,6 +8,7 @@ import (
 1. 跳水板
 2. 恢复空格		--	https://leetcode-cn.com/problems/re-space-lcci/solution/hui-fu-kong-ge-by-leetcode-solution/
 3. 最佳买卖股票时机含冷冻期		--	https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
+4. 最长重复子数组		--		https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/solution/zui-chang-zhong-fu-zi-shu-zu-by-leetcode-solution/
 */
 
 /*
@@ -192,4 +193,41 @@ func max(x, y int) int {
 		return x
 	}
 	return y
+}
+
+/*
+给两个整数数组A和B，返回两个数组中公共的、长度最长的子数组的长度。
+
+示例：
+输入：
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+输出：3
+解释：
+长度最长的公共子数组是 [3, 2, 1] 。
+
+提示：
+1 <= len(A), len(B) <= 1000
+0 <= A[i], B[i] < 100
+*/
+func findLength(A []int, B []int) int {
+	n, m := len(A), len(B)
+	dp := make([][]int, n+1)
+	for i := 0; i < len(dp); i++ {
+		dp[i] = make([]int, m+1)
+	}
+	ans := 0
+	for i := n - 1; i >= 0; i-- {
+		for j := m - 1; j >= 0; j-- {
+			if A[i] == B[j] {
+				dp[i][j] = dp[i+1][j+1] + 1
+			} else {
+				dp[i][j] = 0
+			}
+			if ans < dp[i][j] {
+				ans = dp[i][j]
+			}
+		}
+	}
+	return ans
 }
