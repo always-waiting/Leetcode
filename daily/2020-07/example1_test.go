@@ -25,3 +25,18 @@ func Test_divingBoard(t *testing.T) {
 		t.Errorf("跳回板结果错误: got(%v), expect(%v)", ret, expect)
 	}
 }
+
+func Test_respace(t *testing.T) {
+	dict := []string{"app", "less", "apple"}
+	sent := "appless"
+	ret := respace(dict, sent)
+	if ret != 0 {
+		t.Errorf("恢复空格结构错误: got(%d), expect(%d)", ret, 0)
+	}
+	dict = []string{"looked", "just", "like", "her", "brother"}
+	sent = "jesslookedjustliketimherbrother"
+	ret = respace(dict, sent)
+	if ret != 7 {
+		t.Errorf("恢复空格结构错误: got(%d), expect(%d)", ret, 7)
+	}
+}
