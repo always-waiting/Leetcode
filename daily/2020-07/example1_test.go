@@ -40,3 +40,11 @@ func Test_respace(t *testing.T) {
 		t.Errorf("恢复空格结构错误: got(%d), expect(%d)", ret, 7)
 	}
 }
+
+func Test_maxProfit(t *testing.T) {
+	prices := []int{1, 2, 3, 0, 2}
+	ret := maxProfit(prices)
+	if ret != 3 {
+		t.Errorf("最佳买卖股票时机含冷冻期结果错误: got(%d), expecet(%d)", ret, 3)
+	}
+}
