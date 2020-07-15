@@ -9,6 +9,8 @@ import (
 2. 恢复空格		--	https://leetcode-cn.com/problems/re-space-lcci/solution/hui-fu-kong-ge-by-leetcode-solution/
 3. 最佳买卖股票时机含冷冻期		--	https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
 4. 最长重复子数组		--		https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/solution/zui-chang-zhong-fu-zi-shu-zu-by-leetcode-solution/
+5. 两个数组的交集II
+6. 不同的二叉搜索数
 */
 
 /*
@@ -230,4 +232,75 @@ func findLength(A []int, B []int) int {
 		}
 	}
 	return ans
+}
+
+/*
+给定两个数组，编写一个函数来计算它们的交集。
+
+示例 1:
+输入: nums1 = [1,2,2,1], nums2 = [2,2]
+输出: [2,2]
+
+示例 2:
+输入: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+输出: [4,9]
+
+说明：
+输出结果中每个元素出现的次数，应与元素在两个数组中出现的次数一致。
+我们可以不考虑输出结果的顺序。
+
+进阶:
+如果给定的数组已经排好序呢？你将如何优化你的算法？
+如果 nums1 的大小比 nums2 小很多，哪种方法更优？
+如果 nums2 的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中，你该怎么办？
+*/
+func intersect(nums1 []int, nums2 []int) []int {
+	cache := make(map[int]int)
+	for _, val := range nums1 {
+		if _, ok := cache[val]; ok {
+			cache[val]++
+		} else {
+			cache[val] = 1
+		}
+	}
+	ret := make([]int, 0)
+	for _, val := range nums2 {
+		if _, ok := cache[val]; ok {
+			cache[val]--
+			if cache[val] >= 0 {
+				ret = append(ret, val)
+			}
+		}
+	}
+	return ret
+}
+
+/*
+给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
+
+示例:
+输入: 3
+输出: 5
+解释:
+给定 n = 3, 一共有 5 种不同结构的二叉搜索树:
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+*/
+func numTrees(n int) int {
+	if n < 2 {
+		return 1
+	}
+	G := make([]int, n+1)
+	G[0] = 1
+	G[1] = 1
+	for i := 2; i <= n; i++ {
+		for j := 1; j <= i; j++ {
+			G[i] = G[i] + G[j-1]*G[i-j]
+		}
+	}
+	return G[n]
 }
