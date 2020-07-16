@@ -95,3 +95,41 @@ func Test_numTrees(t *testing.T) {
 		t.Errorf("不同的二叉搜索数结果错误: got(%d), expect(%d)", ret, 5)
 	}
 }
+
+func Test_isBipartite(t *testing.T) {
+	graph := [][]int{[]int{1, 3}, []int{0, 2}, []int{1, 3}, []int{0, 2}}
+	ret := isBipartite(graph)
+	if !ret {
+		t.Errorf("判断二分图错误, got(false), expect(true): input %v", graph)
+	}
+	graph = [][]int{[]int{1, 2, 3}, []int{0, 2}, []int{0, 1, 3}, []int{0, 2}}
+	ret = isBipartite(graph)
+	if ret {
+		t.Errorf("判断二分图错误, got(true), expect(false): input %v", graph)
+	}
+	graph = [][]int{[]int{1}, []int{0}, []int{4}, []int{4}, []int{2, 3}}
+	ret = isBipartite(graph)
+	if !ret {
+		t.Errorf("判断二分图错误, got(false), expect(true): input %v", graph)
+	}
+
+}
+
+func Test_isBipartite1(t *testing.T) {
+	graph := [][]int{[]int{1, 3}, []int{0, 2}, []int{1, 3}, []int{0, 2}}
+	ret := isBipartite1(graph)
+	if !ret {
+		t.Errorf("判断二分图错误, got(false), expect(true): input %v", graph)
+	}
+	graph = [][]int{[]int{1, 2, 3}, []int{0, 2}, []int{0, 1, 3}, []int{0, 2}}
+	ret = isBipartite1(graph)
+	if ret {
+		t.Errorf("判断二分图错误, got(true), expect(false): input %v", graph)
+	}
+	graph = [][]int{[]int{1}, []int{0}, []int{4}, []int{4}, []int{2, 3}}
+	ret = isBipartite1(graph)
+	if !ret {
+		t.Errorf("判断二分图错误, got(false), expect(true): input %v", graph)
+	}
+
+}
