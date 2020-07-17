@@ -143,3 +143,21 @@ func Test_searchInsert(t *testing.T) {
 		t.Errorf("搜索插入位置结果错误, got(%d), expect(%d)", ret, exp)
 	}
 }
+
+func Test_minimumTotal(t *testing.T) {
+	triangle := [][]int{
+		[]int{2},
+		[]int{3, 4},
+		[]int{6, 5, 7},
+		[]int{4, 1, 8, 3},
+	}
+	ret := minimumTotal(triangle)
+	exp := 11
+	if ret != exp {
+		t.Errorf("三角形最小路径和结果错误, got(%d), expect(%d)", ret, exp)
+	}
+	ret = minimumTotal1(triangle)
+	if ret != exp {
+		t.Errorf("三角形最小路径和结果错误, got(%d), expect(%d)", ret, exp)
+	}
+}
