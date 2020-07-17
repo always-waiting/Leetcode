@@ -133,3 +133,13 @@ func Test_isBipartite1(t *testing.T) {
 	}
 
 }
+
+func Test_searchInsert(t *testing.T) {
+	nums := []int{1, 3, 5, 6}
+	target := 40
+	exp := 2
+	ret := searchInsert(nums, target)
+	if ret != exp {
+		t.Errorf("搜索插入位置结果错误, got(%d), expect(%d)", ret, exp)
+	}
+}
