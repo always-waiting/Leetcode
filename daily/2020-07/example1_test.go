@@ -161,3 +161,12 @@ func Test_minimumTotal(t *testing.T) {
 		t.Errorf("三角形最小路径和结果错误, got(%d), expect(%d)", ret, exp)
 	}
 }
+
+func Test_twoSum(t *testing.T) {
+	numbers := []int{2, 7, 11, 15}
+	target := 9
+	ret := twoSum(numbers, target)
+	if !reflect.DeepEqual(ret, []int{1, 2}) {
+		t.Errorf("两数之和 II - 输入有序数组结果错误, got(%v), expect(%v)", ret, []int{1, 2})
+	}
+}

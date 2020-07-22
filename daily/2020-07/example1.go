@@ -10,13 +10,16 @@ import (
 3. 最佳买卖股票时机含冷冻期		--	https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
 4. 最长重复子数组		--		https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/solution/zui-chang-zhong-fu-zi-shu-zu-by-leetcode-solution/
 5. 两个数组的交集II
-6. 不同的二叉搜索数
+6. 不同的二叉搜索数		--		https://leetcode-cn.com/problems/unique-binary-search-trees/
 7. 判断二分图
 8. 搜索插入位置
 9. 三角形最小路径和
+10. 两数之和 II - 输入有序数组
+11. 不同的二叉搜索树 II
 */
 
 /*
+1. 跳水板
 你正在使用一堆木板建造跳水板。有两种类型的木板，其中长度较短的木板长度为shorter，
 长度较长的木板长度为longer。你必须正好使用k块木板。编写一个方法，生成跳水板所有可能的长度。
 
@@ -50,6 +53,7 @@ func divingBoard(shorter int, longer int, k int) []int {
 }
 
 /*
+2. 恢复空格		--	https://leetcode-cn.com/problems/re-space-lcci/solution/hui-fu-kong-ge-by-leetcode-solution/
 哦，不！你不小心把一个长篇文章中的空格、标点都删掉了，并且大写也弄成了小写。
 像句子"I reset the computer. It still didn’t boot!"已经变成了"iresetthecomputeritstilldidntboot"。
 在处理标点符号和大小写之前，你得先把它断成词语。当然了，你有一本厚厚的词典dictionary，不过，有些词没在词典里。
@@ -165,6 +169,7 @@ func min(x, y int) int {
 }
 
 /*
+3. 最佳买卖股票时机含冷冻期		--	https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/solution/zui-jia-mai-mai-gu-piao-shi-ji-han-leng-dong-qi-4/
 给定一个整数数组，其中第i个元素代表了第i天的股票价格 。
 设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
@@ -201,6 +206,7 @@ func max(x, y int) int {
 }
 
 /*
+4. 最长重复子数组		--		https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/solution/zui-chang-zhong-fu-zi-shu-zu-by-leetcode-solution/
 给两个整数数组A和B，返回两个数组中公共的、长度最长的子数组的长度。
 
 示例：
@@ -238,6 +244,7 @@ func findLength(A []int, B []int) int {
 }
 
 /*
+5. 两个数组的交集II
 给定两个数组，编写一个函数来计算它们的交集。
 
 示例 1:
@@ -279,6 +286,7 @@ func intersect(nums1 []int, nums2 []int) []int {
 }
 
 /*
+6. 不同的二叉搜索数
 给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
 
 示例:
@@ -309,6 +317,7 @@ func numTrees(n int) int {
 }
 
 /*
+7. 判断二分图
 给定一个无向图graph，当这个图为二分图时返回true。
 如果我们能将一个图的节点集合分割成两个独立的子集A和B，
 并使图中的每一条边的两个节点一个来自A集合，一个来自B集合，我们就将这个图称为二分图。
@@ -575,6 +584,137 @@ func minArray(a []int) int {
 	for i := 1; i < len(a); i++ {
 		if ret > a[i] {
 			ret = a[i]
+		}
+	}
+	return ret
+}
+
+/*
+10. 两数之和 II - 输入有序数组
+给定一个已按照升序排列的有序数组，找到两个数使得它们相加之和等于目标数。
+函数应该返回这两个下标值index1和index2，其中index1必须小于index2。
+
+说明:
+返回的下标值（index1 和 index2）不是从零开始的。
+你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。
+
+示例:
+输入: numbers = [2, 7, 11, 15], target = 9
+输出: [1,2]
+解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+*/
+func twoSum(numbers []int, target int) []int {
+	start := 0
+	end := len(numbers) - 1
+	for start < end {
+		if numbers[start]+numbers[end] == target {
+			return []int{start + 1, end + 1}
+		} else if numbers[start]+numbers[end] > target {
+			end--
+		} else {
+			start++
+		}
+	}
+	return []int{}
+}
+
+/*
+95. 不同的二叉搜索树 II
+给定一个整数n，生成所有由1 ... n为节点所组成的二叉搜索树。
+
+示例：
+输入：3
+输出：
+[
+  [1,null,3,2],
+  [3,2,null,1],
+  [3,1,null,null,2],
+  [2,1,3],
+  [1,null,2,null,3]
+]
+解释：
+以上的输出对应以下 5 种不同结构的二叉搜索树：
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+提示：
+0 <= n <= 8
+*/
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func generateTrees(n int) []*TreeNode {
+	if n == 0 {
+		return nil
+	}
+	return helper(1, n)
+}
+
+func helper(start, end int) []*TreeNode {
+	if start > end {
+		return nil
+	}
+	allTrees := []*TreeNode{}
+	for i := start; i <= end; i++ {
+		leftTrees := helper(start, i-1)
+		rightTrees := helper(i+1, end)
+		for _, left := range leftTrees {
+			for _, right := range rightTrees {
+				currTree := &TreeNode{Val: i}
+				currTree.Left = left
+				currTree.Right = right
+				allTrees = append(allTrees, currTree)
+
+			}
+		}
+	}
+	return allTrees
+}
+
+/*
+12. 旋转数组的最小数字
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。
+例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一个旋转，该数组的最小值为1。
+
+示例 1：
+输入：[3,4,5,1,2]
+输出：1
+
+示例 2：
+输入：[2,2,2,0,1]
+输出：0
+// 二分查找法
+func minArray(numbers []int) int {
+	low := 0
+	high := len(numbers) - 1
+	for low < high {
+		pivot := low + (high - low) / 2
+        if numbers[pivot] < numbers[high] {
+            high = pivot
+        } else if numbers[pivot] > numbers[high] {
+            low = pivot + 1
+        } else {
+            high--
+        }
+	}
+	return numbers[low]
+}
+*/
+func minArray_question(numbers []int) int {
+	if len(numbers) == 0 {
+		return 0
+	}
+	ret := numbers[0]
+	for i := 1; i < len(numbers); i++ {
+		if ret > numbers[i] {
+			ret = numbers[i]
+			break
 		}
 	}
 	return ret
