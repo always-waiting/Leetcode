@@ -170,3 +170,23 @@ func Test_twoSum(t *testing.T) {
 		t.Errorf("两数之和 II - 输入有序数组结果错误, got(%v), expect(%v)", ret, []int{1, 2})
 	}
 }
+
+func Test_minPathSum(t *testing.T) {
+	grid := [][]int{
+		[]int{1, 3, 1},
+		[]int{1, 5, 1},
+		[]int{4, 2, 1},
+	}
+	ret := minPathSum(grid)
+	exp := 7
+	if ret != exp {
+		t.Errorf("最小路径和结果错误: got(%d), expect(%d)", ret, exp)
+	}
+}
+
+func Test_isInterleave(t *testing.T) {
+	s1, s2, s3 := "aabcc", "dbbca", "aadbbcbcac"
+	if !isInterleave(s1, s2, s3) {
+		t.Errorf("交错字符串结果错误: got(false), expect(true)")
+	}
+}

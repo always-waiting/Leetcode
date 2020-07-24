@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -16,6 +17,9 @@ import (
 9. 三角形最小路径和
 10. 两数之和 II - 输入有序数组
 11. 不同的二叉搜索树 II
+12. 最小路径和
+13. 交错字符串
+14. 除数博弈
 */
 
 /*
@@ -718,4 +722,106 @@ func minArray_question(numbers []int) int {
 		}
 	}
 	return ret
+}
+
+/*
+12. 最小路径和
+给定一个包含非负整数的 m * n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+说明：每次只能向下或者向右移动一步。
+
+示例:
+输入:
+[
+  [1,3,1],
+  [1,5,1],
+  [4,2,1]
+]
+输出: 7
+解释: 因为路径 1→3→1→1→1 的总和最小。
+*/
+func minPathSum(grid [][]int) int {
+	a := len(grid)
+	if a == 0 {
+		return 0
+	}
+	b := len(grid[0])
+	if b == 0 {
+		return 0
+	}
+	sum := make([][]int, a)
+	sum[0] = make([]int, b)
+	sum[0][0] = grid[0][0]
+	for i := 1; i < a; i++ {
+		sum[i] = make([]int, b)
+		sum[i][0] = sum[i-1][0] + grid[i][0]
+	}
+	for j := 1; j < b; j++ {
+		sum[0][j] = sum[0][j-1] + grid[0][j]
+	}
+	for i := 1; i < a; i++ {
+		for j := 1; j < b; j++ {
+			sa := sum[i][j-1] + grid[i][j]
+			sb := sum[i-1][j] + grid[i][j]
+			sum[i][j] = min(sa, sb)
+		}
+	}
+	return sum[a-1][b-1]
+}
+
+/*
+13. 交错字符串
+给定三个字符串 s1, s2, s3, 验证 s3 是否是由 s1 和 s2 交错组成的。
+
+示例 1：
+输入：s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+输出：true
+
+示例 2：
+输入：s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
+输出：false
+*/
+func isInterleave(s1 string, s2 string, s3 string) bool {
+	i, j, k := 0, 0, 0
+	for k < len(s3) {
+		if i < len(s1) && s1[i] == s3[k] {
+			i++
+			k++
+			continue
+		}
+		if j < len(s2) && s2[j] == s3[k] {
+			j++
+			k++
+			continue
+		}
+		fmt.Println(i, j, k)
+		return false
+	}
+	return true
+}
+
+/*
+14. 除数博弈
+爱丽丝和鲍勃一起玩游戏，他们轮流行动。爱丽丝先手开局。
+最初，黑板上有一个数字N 。在每个玩家的回合，玩家需要执行以下操作：
+选出任一x，满足 0 < x < N 且 N % x == 0 。
+用N - x替换黑板上的数字N 。
+如果玩家无法执行这些操作，就会输掉游戏。
+只有在爱丽丝在游戏中取得胜利时才返回 True，否则返回 false。
+假设两个玩家都以最佳状态参与游戏。
+
+示例 1：
+输入：2
+输出：true
+解释：爱丽丝选择 1，鲍勃无法进行操作。
+
+示例 2：
+输入：3
+输出：false
+解释：爱丽丝选择 1，鲍勃也选择 1，然后爱丽丝无法进行操作。
+
+提示：
+1 <= N <= 1000
+*/
+func divisorGame(N int) bool {
+	return N%2 == 0
 }
