@@ -20,6 +20,7 @@ import (
 12. 最小路径和
 13. 交错字符串
 14. 除数博弈
+15. 二叉树的最大深度
 */
 
 /*
@@ -824,4 +825,41 @@ func isInterleave(s1 string, s2 string, s3 string) bool {
 */
 func divisorGame(N int) bool {
 	return N%2 == 0
+}
+
+/*
+15. 二叉树的最大深度
+给定一个二叉树，找出其最大深度。
+二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+说明: 叶子节点是指没有子节点的节点。
+
+示例：
+给定二叉树 [3,9,20,null,null,15,7]，
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回它的最大深度 3 。
+*/
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func maxDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	if root.Right == nil && root.Left == nil {
+		return 1
+	} else if root.Right == nil {
+		return maxDepth(root.Left) + 1
+	} else if root.Left == nil {
+		return maxDepth(root.Right) + 1
+	}
+	return max(maxDepth(root.Left), maxDepth(root.Right)) + 1
 }
