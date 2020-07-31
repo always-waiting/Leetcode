@@ -190,3 +190,8 @@ func Test_isInterleave(t *testing.T) {
 		t.Errorf("交错字符串结果错误: got(false), expect(true)")
 	}
 }
+
+func Test_minimalSteps(t *testing.T) {
+	maze := []string{"S#O", "M..", "M.T"}
+	minimalSteps(maze)
+}

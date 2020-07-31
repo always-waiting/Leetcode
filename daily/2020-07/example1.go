@@ -21,6 +21,9 @@ import (
 13. 交错字符串
 14. 除数博弈
 15. 二叉树的最大深度
+16. 寻宝		--	https://leetcode-cn.com/problems/xun-bao/solution/
+17. 整数拆分	--	https://leetcode-cn.com/problems/integer-break/
+
 */
 
 /*
@@ -862,4 +865,142 @@ func maxDepth(root *TreeNode) int {
 		return maxDepth(root.Right) + 1
 	}
 	return max(maxDepth(root.Left), maxDepth(root.Right)) + 1
+}
+
+/*
+16. 寻宝
+我们得到了一副藏宝图，藏宝图显示，在一个迷宫中存在着未被世人发现的宝藏。
+迷宫是一个二维矩阵，用一个字符串数组表示。它标识了唯一的入口（用 'S' 表示），和唯一的宝藏地点（用 'T' 表示）。
+但是，宝藏被一些隐蔽的机关保护了起来。在地图上有若干个机关点（用 'M' 表示），只有所有机关均被触发，才可以拿到宝藏。
+要保持机关的触发，需要把一个重石放在上面。迷宫中有若干个石堆（用 'O' 表示），每个石堆都有无限个足够触发机关的重石。
+但是由于石头太重，我们一次只能搬一个石头到指定地点。迷宫中同样有一些墙壁（用 '#' 表示），我们不能走入墙壁。
+剩余的都是可随意通行的点（用 '.' 表示）。石堆、机关、起点和终点（无论是否能拿到宝藏）也是可以通行的。
+我们每步可以选择向上/向下/向左/向右移动一格，并且不能移出迷宫。搬起石头和放下石头不算步数。
+那么，从起点开始，我们最少需要多少步才能最后拿到宝藏呢？如果无法拿到宝藏，返回 -1 。
+
+示例 1：
+输入： ["S#O", "M..", "M.T"]
+输出：16
+解释：最优路线为： S->O, cost = 4, 去搬石头 O->第二行的M, cost = 3, M机关触发 第二行的M->O, cost = 3,
+我们需要继续回去 O 搬石头。 O->第三行的M, cost = 4, 此时所有机关均触发 第三行的M->T, cost = 2，去T点拿宝藏。 总步数为16。
+
+示例 2：
+输入： ["S#O", "M.#", "M.T"]
+输出：-1
+解释：我们无法搬到石头触发机关
+
+示例 3：
+输入： ["S#O", "M.T", "M.."]
+输出：17
+解释：注意终点也是可以通行的。
+
+限制：
+1 <= maze.length <= 100
+1 <= maze[i].length <= 100
+maze[i].length == maze[j].length
+S 和 T 有且只有一个
+0 <= M的数量 <= 16
+0 <= O的数量 <= 40，题目保证当迷宫中存在 M 时，一定存在至少一个 O 。
+*/
+func minimalSteps(maze []string) int {
+	startPos := findPosition(maze, 83)
+	stonePos := findPosition(maze, 79)
+	endPos := findPosition(maze, 84)
+	trapPos := findPosition(maze, 77)
+	wallPos := findPosition(maze, 35)
+	fmt.Printf("起点在:%v\n", startPos)
+	fmt.Printf("石头在:%v\n", stonePos)
+	fmt.Printf("终点在:%v\n", endPos)
+	fmt.Printf("陷阱在:%v\n", trapPos)
+	fmt.Printf("墙在:%v\n", wallPos)
+	return 0
+}
+
+var (
+	dx = []int{1, -1, 0, 0}
+	dy = []int{0, 0, 1, -1}
+)
+
+type Pos struct {
+	x int
+	y int
+}
+
+func (this Pos) minlength(maze []string) [][]int {
+	queue := make([]Pos, 0)
+	queue = append(queue, this)
+	n := len(maze)
+	m := len(maze[0])
+	ret := make([][]int, n)
+	for i := 0; i < n; i++ {
+		ret[i] = make([]int, m)
+		for j := 0; j < m; j++ {
+			ret[i][j] = -1
+		}
+	}
+	ret[this.x][this.y] = 0
+	for len(queue) > 0 {
+		p := queue[0]
+		queue = queue[1:]
+		for k := 0; k < 4; k++ {
+			np := Pos{p.x + dx[k], p.y + dy[k]}
+			if np.InBound(m, n) && maze[np.x][np.y] != '#' && ret[np.x][np.y] == -1 {
+				queue = append(queue, np)
+			}
+		}
+	}
+	return ret
+}
+
+func (this Pos) InBound(n, m int) bool {
+	return this.x >= 0 && this.x < n && this.y >= 0 && this.y < m
+}
+
+func (this Pos) Is(that Pos) bool {
+	if this.x == that.x && this.y == that.y {
+		return true
+	}
+	return false
+}
+
+func findPosition(maze []string, pos rune) []Pos {
+	ret := make([]Pos, 0)
+	for idxI, row := range maze {
+		for idxJ, step := range row {
+			if step == pos {
+				ret = append(ret, Pos{idxI, idxJ})
+			}
+		}
+	}
+	return ret
+}
+
+func calLen(start []Pos, end []Pos, wall []Pos) {
+}
+
+/*
+17. 整数拆分
+给定一个正整数 n，将其拆分为至少两个正整数的和，并使这些整数的乘积最大化。返回你可以获得的最大乘积。
+
+示例 1:
+输入: 2
+输出: 1
+解释: 2 = 1 + 1, 1 × 1 = 1。
+
+示例 2:
+输入: 10
+输出: 36
+解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
+说明: 你可以假设 n 不小于 2 且不大于 58。
+*/
+func integerBreak(n int) int {
+	dp := make([]int, n+1)
+	for i := 2; i <= n; i++ {
+		curMax := 0
+		for j := 1; j < i; j++ {
+			curMax = max(curMax, max(j*(i-j), j*dp[i-j]))
+		}
+		dp[i] = curMax
+	}
+	return dp[n]
 }
