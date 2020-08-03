@@ -56,6 +56,8 @@ func addStrings(num1 string, num2 string) string {
 	}
 	if carry > byte('0') {
 		ret[length] = carry
+	} else {
+		ret = ret[1:]
 	}
 	return string(ret)
 }
