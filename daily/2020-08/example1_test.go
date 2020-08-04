@@ -13,3 +13,11 @@ func Test_addStrings(t *testing.T) {
 	}
 
 }
+
+func Test_canFinish(t *testing.T) {
+	ret := canFinish(2, [][]int{[]int{1, 0}})
+	t.Log(ret)
+	if !ret {
+		t.Errorf("课程表I结果错误: got(%v), expect(true)", ret)
+	}
+}
