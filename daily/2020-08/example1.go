@@ -15,6 +15,7 @@ func main() {
 3. 回文对	--	https://leetcode-cn.com/problems/palindrome-pairs/
 4. 相同的树	--	https://leetcode-cn.com/problems/same-tree/
 5. 二叉树展开为链表	--	https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/
+6. 最小区间	--	https://leetcode-cn.com/problems/smallest-range-covering-elements-from-k-lists/
 */
 
 /*
@@ -393,4 +394,95 @@ func preorderflatten(root *TreeNode) *TreeNode {
 	}
 	left.Right = right
 	return root
+}
+
+/*
+6. 最小区间
+你有k个升序排列的整数列表。找到一个最小区间，使得k个列表中的每个列表至少有一个数包含在其中。
+我们定义如果 b-a < d-c 或者在 b-a == d-c 时 a < c，则区间 [a,b] 比 [c,d] 小。
+
+示例：
+输入：[[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]
+输出：[20,24]
+解释：
+列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。
+列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。
+列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。
+
+提示：
+给定的列表可能包含重复元素，所以在这里升序表示 >= 。
+1 <= k <= 3500
+-105 <= 元素的值 <= 105
+对于使用Java的用户，请注意传入类型已修改为List<List<Integer>>。重置代码模板后可以看到这项改动。
+*/
+type heap struct {
+	idx    []int
+	minIdx int
+	maxIdx int
+}
+
+func (this *heap) Init(nums [][]int) {
+	this.idx = make([]int, len(nums))
+	for i, idx := range this.idx {
+		if idx >= len(nums[i]) ||
+			idx >= len(nums[this.minIdx]) ||
+			idx >= len(nums[this.maxIdx]) {
+			break
+		}
+		if nums[i][idx] < nums[this.minIdx][idx] {
+			this.minIdx = i
+		}
+		if nums[i][idx] > nums[this.maxIdx][idx] {
+			this.maxIdx = i
+		}
+	}
+}
+
+func (this *heap) cal(nums [][]int) bool {
+	for i, idx := range this.idx {
+		if idx >= len(nums[i]) ||
+			this.idx[this.minIdx] >= len(nums[this.minIdx]) ||
+			this.idx[this.maxIdx] >= len(nums[this.maxIdx]) {
+			return false
+		}
+		if nums[i][idx] < nums[this.minIdx][this.idx[this.minIdx]] {
+			this.minIdx = i
+		}
+		if nums[i][idx] > nums[this.maxIdx][this.idx[this.maxIdx]] {
+			this.maxIdx = i
+		}
+	}
+	return true
+}
+
+func (this *heap) getRange(nums [][]int) []int {
+	return []int{nums[this.minIdx][this.idx[this.minIdx]], nums[this.maxIdx][this.idx[this.maxIdx]]}
+}
+
+func (this *heap) step(nums [][]int) bool {
+	this.idx[this.minIdx]++
+	return this.cal(nums)
+}
+
+func smallestRange(nums [][]int) []int {
+	h := &heap{}
+	h.Init(nums)
+	var ret []int
+	for {
+		if ret == nil {
+			ret = h.getRange(nums)
+			if !h.step(nums) {
+				break
+			}
+			continue
+		}
+		tmp := h.getRange(nums)
+		if ret[1]-ret[0] > tmp[1]-tmp[0] {
+			ret = tmp
+		}
+		if !h.step(nums) {
+			break
+		}
+	}
+	return ret
 }

@@ -52,3 +52,13 @@ func Test_TreeTraversal(t *testing.T) {
 	t.Log(inOrder)
 	t.Log(inOrder1)
 }
+
+func Test_smallestRange(t *testing.T) {
+	nums := [][]int{
+		[]int{4, 10, 15, 24, 26},
+		[]int{0, 9, 12, 20},
+		[]int{5, 18, 22, 30},
+	}
+	ret := smallestRange(nums)
+	t.Log(ret)
+}
