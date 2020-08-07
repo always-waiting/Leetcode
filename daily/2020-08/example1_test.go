@@ -37,14 +37,18 @@ func Test_isPalindrome(t *testing.T) {
 	t.Log(pairs)
 }
 
-func Test_f(t *testing.T) {
-	a := "abcd"
-	tree = []Node{Node{[26]int{}, -1}}
-	insert(a, 0)
-	insert("bcd", 1)
-	insert("aab", 2)
-	for _, node := range tree {
-		t.Log(node)
-	}
-	t.Log(findWord("dcba", 0, 3))
+func Test_TreeTraversal(t *testing.T) {
+	p := &TreeNode{0, nil, nil}
+	p.Left = &TreeNode{1, nil, nil}
+	p.Right = &TreeNode{2, nil, nil}
+	ret := preorderTraversal(p)
+	t.Log(ret)
+
+	preOrder := []int{3, 9, 20, 15, 7}
+	inOrder := []int{9, 3, 15, 20, 7}
+	tree := buildTree(preOrder, inOrder)
+
+	inOrder1 := inorderTraversal(tree)
+	t.Log(inOrder)
+	t.Log(inOrder1)
 }
