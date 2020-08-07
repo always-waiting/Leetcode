@@ -13,6 +13,8 @@ func main() {
 1. 字符串相加	--	https://leetcode-cn.com/problems/add-strings/
 2. 课程表	--	https://leetcode-cn.com/problems/course-schedule/
 3. 回文对	--	https://leetcode-cn.com/problems/palindrome-pairs/
+4. 相同的树	--	https://leetcode-cn.com/problems/same-tree/
+5. 二叉树展开为链表	--	https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/
 */
 
 /*
@@ -233,7 +235,7 @@ func isPalindrome(s string, left, right int) bool {
 }
 
 /*
-100. 相同的树
+4. 相同的树
 给定两个二叉树，编写一个函数来检验它们是否相同。
 如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
 
@@ -339,5 +341,56 @@ func buildTree(preorder []int, inorder []int) *TreeNode {
 	rightPreOrder := preorder[len(leftInOrder)+1:]
 	root.Left = buildTree(leftPreOrder, leftInOrder)
 	root.Right = buildTree(rightPreOrder, rightInOrder)
+	return root
+}
+
+/*
+5. 二叉树展开为链表
+给定一个二叉树，原地将它展开为一个单链表。
+
+例如，给定二叉树
+
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+将其展开为：
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+*/
+func flatten(root *TreeNode) {
+	if root == nil {
+		return
+	}
+	preorderflatten(root)
+}
+
+func preorderflatten(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	left := preorderflatten(root.Left)
+	right := preorderflatten(root.Right)
+	root.Left = nil
+	root.Right = left
+	if left == nil {
+		root.Right = right
+		return root
+	}
+	for left.Right != nil {
+		left = left.Right
+	}
+	left.Right = right
 	return root
 }
