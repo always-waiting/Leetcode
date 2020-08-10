@@ -62,3 +62,8 @@ func Test_smallestRange(t *testing.T) {
 	ret := smallestRange(nums)
 	t.Log(ret)
 }
+
+func Test_countBinarySubstrings(t *testing.T) {
+	s := "00110"
+	t.Log(countBinarySubstrings(s))
+}
