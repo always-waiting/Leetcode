@@ -67,3 +67,17 @@ func Test_countBinarySubstrings(t *testing.T) {
 	s := "00110"
 	t.Log(countBinarySubstrings(s))
 }
+
+func Test_solve(t *testing.T) {
+	board := [][]byte{
+		[]byte("OXXOX"),
+		[]byte("XOOXO"),
+		[]byte("XOXOX"),
+		[]byte("OXOOO"),
+		[]byte("XXOXO"),
+	}
+	solve(board)
+	for _, v := range board {
+		t.Log(string(v))
+	}
+}
