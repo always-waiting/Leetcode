@@ -19,6 +19,8 @@ func main() {
 7. 计数二进制子串	--	https://leetcode-cn.com/problems/count-binary-substrings/
 8. 被围绕的区域	--	https://leetcode-cn.com/problems/surrounded-regions/
 9. 克隆图	--	https://leetcode-cn.com/problems/clone-graph/
+10. 滑动窗口的最大值I	--	https://leetcode-cn.com/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/
+11. 132模式	--	https://leetcode-cn.com/problems/132-pattern/
 */
 
 /*
@@ -665,4 +667,99 @@ func cloneGraph(node *GNode) *GNode {
 		return ret
 	}
 	return cg(node)
+}
+
+/*
+10. 滑动窗口的最大值I
+给定一个数组nums和滑动窗口的大小k，请找出所有滑动窗口里的最大值。
+
+示例:
+输入: nums = [1,3,-1,-3,5,3,6,7], 和 k = 3
+输出: [3,3,5,5,6,7]
+解释:
+  滑动窗口的位置                最大值
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+
+提示：
+你可以假设 k 总是有效的，在输入数组不为空的情况下，1 ≤ k ≤ 输入数组的大小。
+*/
+func maxSlidingWindow(nums []int, k int) []int {
+	ret := make([]int, 0)
+	if len(nums) == 0 {
+		return ret
+	}
+	getMax := func(in []int) int {
+		ret := in[0]
+		for i := 1; i < len(in); i++ {
+			if in[i] > ret {
+				ret = in[i]
+			}
+		}
+		return ret
+	}
+	for i := 0; i <= len(nums)-k; i++ {
+		ret = append(ret, getMax(nums[i:i+k]))
+	}
+	return ret
+}
+
+/*
+11. 132模式
+给定一个整数序列：a1, a2, ..., an，一个132模式的子序列 ai, aj, ak 被定义为：
+当 i < j < k 时，ai < ak < aj。设计一个算法，当给定有n个数字的序列时，
+验证这个序列中是否含有132模式的子序列。
+
+注意：n 的值小于15000。
+示例1:
+输入: [1, 2, 3, 4]
+输出: False
+解释: 序列中不存在132模式的子序列。
+示例 2:
+输入: [3, 1, 4, 2]
+输出: True
+解释: 序列中有 1 个132模式的子序列： [1, 4, 2].
+示例 3:
+输入: [-1, 3, 2, 0]
+输出: True
+解释: 序列中有 3 个132模式的的子序列: [-1, 3, 2], [-1, 3, 0] 和 [-1, 2, 0].
+*/
+func find132pattern(nums []int) bool {
+	if len(nums) == 0 {
+		return false
+	}
+	mins := make([]int, len(nums))
+	mins[0] = nums[0]
+	for i := 1; i < len(nums); i++ {
+		if nums[i] < mins[i-1] {
+			mins[i] = nums[i]
+		} else {
+			mins[i] = mins[i-1]
+		}
+	}
+	stack := make([]int, 0)
+	for i := len(nums) - 1; i >= 0; i-- {
+		if nums[i] <= mins[i] {
+			continue
+		}
+		if len(stack) == 0 {
+			stack = append(stack, nums[i])
+			continue
+		}
+		if nums[i] > stack[len(stack)-1] {
+			for len(stack) != 0 {
+				if stack[len(stack)-1] > mins[i] {
+					return true
+				}
+				stack = stack[0 : len(stack)-1]
+			}
+		}
+		stack = append(stack, nums[i])
+	}
+	return false
 }

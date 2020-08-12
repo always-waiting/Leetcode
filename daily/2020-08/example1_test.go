@@ -81,3 +81,8 @@ func Test_solve(t *testing.T) {
 		t.Log(string(v))
 	}
 }
+
+func Test_find132pattern(t *testing.T) {
+	nums := []int{-1, 3, 2, 0}
+	t.Log(find132pattern(nums))
+}
