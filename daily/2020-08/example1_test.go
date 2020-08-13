@@ -86,3 +86,18 @@ func Test_find132pattern(t *testing.T) {
 	nums := []int{-1, 3, 2, 0}
 	t.Log(find132pattern(nums))
 }
+
+func Test_multiply(t *testing.T) {
+	//t.Log(cal("123", '5'))
+	//t.Log(cal("0", '0'))
+	//t.Log(multiply("123", "456"))
+	//t.Log(multiply("0", "0"))
+	t.Log(multiply("498828660196", "840477629533"))
+	//t.Log(cal("43", '7', 1))
+	//t.Log(multiply("9133", "0"))
+	t.Log(cal("9133", '0', 0))
+}
+
+func Test_productExceptSelf(t *testing.T) {
+	t.Log(productExceptSelf1([]int{1, 2, 3, 4}))
+}

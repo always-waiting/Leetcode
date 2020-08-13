@@ -21,6 +21,9 @@ func main() {
 9. 克隆图	--	https://leetcode-cn.com/problems/clone-graph/
 10. 滑动窗口的最大值I	--	https://leetcode-cn.com/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/
 11. 132模式	--	https://leetcode-cn.com/problems/132-pattern/
+12. 字符串相乘	--	https://leetcode-cn.com/problems/multiply-strings/
+13. 除自身以外数组的乘积	--	https://leetcode-cn.com/problems/product-of-array-except-self/
+14. 二叉树的右视图	--	https://leetcode-cn.com/problems/binary-tree-right-side-view/
 */
 
 /*
@@ -762,4 +765,264 @@ func find132pattern(nums []int) bool {
 		stack = append(stack, nums[i])
 	}
 	return false
+}
+
+/*
+12. 字符串相乘
+给定两个以字符串形式表示的非负整数num1和num2，返回num1和num2的乘积，它们的乘积也表示为字符串形式。
+
+示例 1:
+输入: num1 = "2", num2 = "3"
+输出: "6"
+示例 2:
+输入: num1 = "123", num2 = "456"
+输出: "56088"
+
+说明：
+num1 和 num2 的长度小于110。
+num1 和 num2 只包含数字 0-9。
+num1 和 num2 均不以零开头，除非是数字 0 本身。
+不能使用任何标准库的大数类型（比如 BigInteger）或直接将输入转换为整数来处理。
+*/
+func multiply(num1 string, num2 string) string {
+	if num1 == "0" || num2 == "0" {
+		return "0"
+	}
+	sum := []string{}
+	for i := len(num2) - 1; i >= 0; i-- {
+		ele := cal(num1, num2[i], len(num2)-i-1)
+		sum = append(sum, ele)
+	}
+	ret := "0"
+	for _, val := range sum {
+		ret = add(ret, val)
+	}
+	return ret
+}
+
+func cal(num1 string, i byte, j int) string {
+	ret := []string{}
+	for k := len(num1) - 1; k >= 0; k-- {
+		loop := int(i) - '0'
+		tmp := "0"
+		for loop != 0 {
+			tmp = add(tmp, string(num1[k]))
+			loop--
+		}
+		loop = j + len(num1) - k - 1
+		if tmp == "0" {
+			continue
+		}
+		for loop != 0 {
+			tmp = tmp + "0"
+			loop--
+		}
+		ret = append(ret, tmp)
+	}
+	retStr := "0"
+	for i := 0; i < len(ret); i++ {
+		retStr = add(retStr, ret[i])
+	}
+	return retStr
+}
+
+func add(num1 string, num2 string) string {
+	i := len(num1) - 1
+	j := len(num2) - 1
+	carry := false
+	ret := []byte{}
+	for i >= 0 && j >= 0 {
+		sum := num1[i] + num2[j] - '0'
+		if carry {
+			sum = sum + 1
+		}
+		if sum > '9' {
+			carry = true
+			ret = append(ret, sum-'9'+'0'-1)
+		} else {
+			carry = false
+			ret = append(ret, sum)
+		}
+		i--
+		j--
+	}
+	for i >= 0 {
+		var sum byte
+		if carry {
+			sum = num1[i] + 1
+		} else {
+			sum = num1[i]
+		}
+		if sum > '9' {
+			carry = true
+			ret = append(ret, sum-'9'+'0'-1)
+		} else {
+			carry = false
+			ret = append(ret, sum)
+		}
+		i--
+	}
+	for j >= 0 {
+		var sum byte
+		if carry {
+			sum = num2[j] + 1
+		} else {
+			sum = num2[j]
+		}
+		if sum > '9' {
+			carry = true
+			ret = append(ret, sum-'9'+'0'-1)
+		} else {
+			carry = false
+			ret = append(ret, sum)
+		}
+		j--
+	}
+	if carry {
+		ret = append(ret, '1')
+	}
+	i = 0
+	j = len(ret) - 1
+	for i < j {
+		tmp := ret[i]
+		ret[i] = ret[j]
+		ret[j] = tmp
+		i++
+		j--
+	}
+	return string(ret)
+}
+
+/*
+// 解题结果，上面的代码测试超时，但是正确
+func multiply(num1 string, num2 string) string {
+    if num1 == "0" || num2 == "0" {
+        return "0"
+    }
+    ans := "0"
+    m, n := len(num1), len(num2)
+    for i := n - 1; i >= 0; i-- {
+        curr := ""
+        add := 0
+        for j := n - 1; j > i; j-- {
+            curr += "0"
+        }
+        y := int(num2[i] - '0')
+        for j := m - 1; j >= 0; j-- {
+            x := int(num1[j] - '0')
+            product := x * y + add
+            curr = strconv.Itoa(product % 10) + curr
+            add = product / 10
+        }
+        for ; add != 0; add /= 10 {
+            curr = strconv.Itoa(add % 10) + curr
+        }
+        ans = addStrings(ans, curr)
+    }
+    return ans
+}
+
+func addStrings(num1, num2 string) string {
+    i, j := len(num1) - 1, len(num2) - 1
+    add := 0
+    ans := ""
+    for ; i >= 0 || j >= 0 || add != 0; i, j = i - 1, j - 1 {
+        x, y := 0, 0
+        if i >= 0 {
+            x = int(num1[i] - '0')
+        }
+        if j >= 0 {
+            y = int(num2[j] - '0')
+        }
+        result := x + y + add
+        ans = strconv.Itoa(result % 10) + ans
+        add = result / 10
+    }
+    return ans
+}
+*/
+
+/*
+13. 除自身以外数组的乘积
+给你一个长度为n的整数数组nums，其中n > 1，返回输出数组output，其中output[i]等于nums中除nums[i]之外其余各元素的乘积。
+
+示例:
+输入: [1,2,3,4]
+输出: [24,12,8,6]
+
+提示：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。
+说明: 请不要使用除法，且在O(n)时间复杂度内完成此题。
+进阶：
+你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。）
+*/
+func productExceptSelf(nums []int) []int {
+	left := make([]int, len(nums))
+	left[0] = 1
+	right := make([]int, len(nums))
+	right[len(nums)-1] = 1
+	for i := 1; i < len(nums); i++ {
+		left[i] = left[i-1] * nums[i-1]
+	}
+	for i := len(nums) - 2; i >= 0; i-- {
+		right[i] = right[i+1] * nums[i+1]
+	}
+	ret := []int{}
+	for i := 0; i < len(nums); i++ {
+		ret = append(ret, left[i]*right[i])
+	}
+	return ret
+}
+
+func productExceptSelf1(nums []int) []int {
+	ret := make([]int, len(nums))
+	ret[0] = 1
+	for i := 1; i < len(nums); i++ {
+		ret[i] = ret[i-1] * nums[i-1]
+	}
+	tmp := 1
+	for i := len(nums) - 1; i >= 0; i-- {
+		ret[i] = ret[i] * tmp
+		tmp = tmp * nums[i]
+	}
+	return ret
+}
+
+/*
+14. 二叉树的右视图
+给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+示例:
+输入: [1,2,3,null,5,null,4]
+输出: [1, 3, 4]
+解释:
+
+   1            <---
+ /   \
+2     3         <---
+ \     \
+  5     4       <---
+*/
+func rightSideView(root *TreeNode) []int {
+	if root == nil {
+		return []int{}
+	}
+	ret := []int{root.Val}
+	rightRet := rightSideView(root.Right)
+	leftRet := rightSideView(root.Left)
+	i := 0
+	j := 0
+	for i < len(rightRet) && j < len(leftRet) {
+		ret = append(ret, rightRet[i])
+		i++
+		j++
+	}
+	for i < len(rightRet) {
+		ret = append(ret, rightRet[i])
+		i++
+	}
+	for j < len(leftRet) {
+		ret = append(ret, leftRet[j])
+		j++
+	}
+	return ret
 }
