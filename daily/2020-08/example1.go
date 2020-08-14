@@ -30,6 +30,7 @@ func main() {
 17. 组合总和 III	--	https://leetcode-cn.com/problems/combination-sum-iii/
 18. 二叉搜索树中第K小的元素	--	https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/
 19. 验证二叉树	--	https://leetcode-cn.com/problems/validate-binary-tree-nodes/
+20. 负二进制数相加	--	https://leetcode-cn.com/problems/adding-two-negabinary-numbers/
 */
 
 /*
@@ -1370,4 +1371,66 @@ func findRoot(leftChild, rightChild []int) int {
 		}
 	}
 	return -1
+}
+
+/*
+20. 负二进制数相加
+给出基数为-2的两个数arr1和arr2，返回两数相加的结果。
+数字以数组形式给出：数组由若干0和1组成，按最高有效位到最低有效位的顺序排列。
+例如，arr = [1,1,0,1] 表示数字 (-2)^3 + (-2)^2 + (-2)^0 = -3。数组形式的数字也同样不含前导零：以arr为例，这意味着要么arr == [0]，要么arr[0] == 1。
+返回相同表示形式的arr1和arr2相加的结果。两数的表示形式为：不含前导零、由若干0和1组成的数组。
+
+示例：
+输入：arr1 = [1,1,1,1,1], arr2 = [1,0,1]
+输出：[1,0,0,0,0]
+解释：arr1 表示11，arr2表示5，输出表示16 。
+提示：
+1 <= arr1.length <= 1000
+1 <= arr2.length <= 1000
+arr1 和 arr2 都不含前导零
+arr1[i] 为 0 或 1
+arr2[i] 为 0 或 1
+*/
+func addNegabinary(arr1, arr2 []int) []int {
+	maxLen := len(arr1)
+	if maxLen < len(arr2) {
+		maxLen = len(arr2)
+		tmp := arr1
+		arr1 = arr2
+		arr2 = tmp
+	}
+	ret := make([]int, maxLen+2)
+	i := len(arr1) - 1
+	j := len(arr2) - 1
+	count := maxLen + 2 - 1
+	for i >= 0 && j >= 0 {
+		tmp := arr1[i] + arr2[j] + ret[count]
+		ret[count] = tmp % 2
+		if tmp >= 2 {
+			ret[count-1] = ret[count-1] + tmp/2
+			ret[count-2] = ret[count-2] + tmp/2
+		}
+		count--
+		i--
+		j--
+	}
+	for i >= 0 && count >= 0 {
+		tmp := arr1[i] + ret[count]
+		ret[count] = tmp % 2
+		if tmp >= 2 {
+			ret[count-1] = ret[count-1] + tmp/2
+			ret[count-2] = ret[count-2] + tmp/2
+		}
+		i--
+		count--
+	}
+	tmp := ret[1]
+	ret[1] = ret[1] % 2
+	ret[0] = (ret[0] + tmp/2) % 2
+	for ret[0] == 0 && len(ret) != 1 {
+		if ret[0] == 0 {
+			ret = ret[1:]
+		}
+	}
+	return ret
 }

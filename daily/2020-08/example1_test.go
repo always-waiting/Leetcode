@@ -133,3 +133,16 @@ func Test_validateBinaryTreeNodes(t *testing.T) {
 	t.Log(validateBinaryTreeNodes(3, []int{1, -1, 0}, []int{-1, -1, -1}))                       //true
 	t.Log(validateBinaryTreeNodes(4, []int{1, 2, 0, -1}, []int{-1, -1, -1, -1}))                //false
 }
+
+func Test_addNegabinary(t *testing.T) {
+	t.Log([]int{1, 0, 0, 0, 0}, addNegabinary([]int{1, 1, 1, 1, 1}, []int{1, 0, 1}))
+	t.Log([]int{1, 1, 0, 1, 0}, addNegabinary([]int{1}, []int{1, 0, 1}))
+	t.Log([]int{1, 1, 0}, addNegabinary([]int{1}, []int{1}))
+	t.Log([]int{0}, addNegabinary([]int{1, 1}, []int{1}))
+	t.Log([]int{1, 1, 0}, addNegabinary([]int{1, 1, 1}, []int{1, 1}))
+	t.Log([]int{1, 1, 0, 1, 0}, addNegabinary([]int{1, 1, 1}, []int{1, 1, 1}))
+	t.Log([]int{1, 1, 0, 1}, addNegabinary([]int{1, 1, 1, 0}, []int{1, 1, 1}))
+	t.Log([]int{1, 0}, addNegabinary([]int{1, 1, 1, 1}, []int{1, 1, 1}))
+	t.Log([]int{1, 1, 0, 1, 0, 1}, addNegabinary([]int{1, 1, 1, 1}, []int{1, 1, 1, 0}))
+	t.Log([]int{1, 0, 1, 0}, addNegabinary([]int{1, 1, 1, 1}, []int{1, 1, 1, 1}))
+}
