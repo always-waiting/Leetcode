@@ -29,6 +29,7 @@ func main() {
 16. 有效的括号	--	https://leetcode-cn.com/problems/valid-parentheses/
 17. 组合总和 III	--	https://leetcode-cn.com/problems/combination-sum-iii/
 18. 二叉搜索树中第K小的元素	--	https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/
+19. 验证二叉树	--	https://leetcode-cn.com/problems/validate-binary-tree-nodes/
 */
 
 /*
@@ -1291,4 +1292,82 @@ func kthSmallest(root *TreeNode, k int) int {
 		smallStack = append(smallStack, get)
 	}
 	return smallStack[k-1]
+}
+
+/*
+19. 验证二叉树
+二叉树上有 n 个节点，按从 0 到 n - 1 编号，其中节点 i 的两个子节点分别是 leftChild[i] 和 rightChild[i]。
+只有所有节点能够形成且只形成一颗有效的二叉树时，返回true；否则返回false。
+如果节点i没有左子节点，那么leftChild[i]就等于-1。右子节点也符合该规则。
+注意：节点没有值，本问题中仅仅使用节点编号。
+
+示例 1：
+输入：n = 4, leftChild = [1,-1,3,-1], rightChild = [2,-1,-1,-1]
+输出：true
+示例 2：
+输入：n = 4, leftChild = [1,-1,3,-1], rightChild = [2,3,-1,-1]
+输出：false
+示例 3：
+输入：n = 2, leftChild = [1,0], rightChild = [-1,-1]
+输出：false
+示例 4：
+输入：n = 6, leftChild = [1,-1,-1,4,-1,-1], rightChild = [2,-1,-1,5,-1,-1]
+输出：false
+
+提示：
+1 <= n <= 10^4
+leftChild.length == rightChild.length == n
+-1 <= leftChild[i], rightChild[i] <= n - 1
+*/
+func validateBinaryTreeNodes(n int, leftChild []int, rightChild []int) bool {
+	root := findRoot(leftChild, rightChild)
+	if root == -1 {
+		return false
+	}
+	stack := []int{root}
+	seen := map[int]bool{root: true}
+	for len(stack) != 0 {
+		now := stack[0]
+		stack = stack[1:]
+		lNode := leftChild[now]
+		rNode := rightChild[now]
+		if lNode != -1 {
+			if _, ok := seen[lNode]; ok {
+				return false
+			} else {
+				seen[lNode] = true
+				stack = append(stack, lNode)
+			}
+		}
+		if rNode != -1 {
+			if _, ok := seen[rNode]; ok {
+				return false
+			} else {
+				seen[rNode] = true
+				stack = append(stack, rNode)
+			}
+		}
+	}
+	if len(seen) != n {
+		return false
+	}
+	return true
+}
+
+func findRoot(leftChild, rightChild []int) int {
+	indeg := make([]int, len(leftChild))
+	for i := 0; i < len(leftChild); i++ {
+		if leftChild[i] != -1 {
+			indeg[leftChild[i]]++
+		}
+		if rightChild[i] != -1 {
+			indeg[rightChild[i]]++
+		}
+	}
+	for i, val := range indeg {
+		if val == 0 {
+			return i
+		}
+	}
+	return -1
 }
