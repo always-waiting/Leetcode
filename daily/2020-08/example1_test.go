@@ -144,5 +144,6 @@ func Test_addNegabinary(t *testing.T) {
 	t.Log([]int{1, 1, 0, 1}, addNegabinary([]int{1, 1, 1, 0}, []int{1, 1, 1}))
 	t.Log([]int{1, 0}, addNegabinary([]int{1, 1, 1, 1}, []int{1, 1, 1}))
 	t.Log([]int{1, 1, 0, 1, 0, 1}, addNegabinary([]int{1, 1, 1, 1}, []int{1, 1, 1, 0}))
+	t.Log([]int{1, 1, 0, 1}, addNegabinary([]int{1, 1}, []int{1, 0}))
 	t.Log([]int{1, 0, 1, 0}, addNegabinary([]int{1, 1, 1, 1}, []int{1, 1, 1, 1}))
 }
