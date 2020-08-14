@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "math"
 
 func main() {
 	fmt.Println("vim-go")
@@ -24,6 +25,10 @@ func main() {
 12. 字符串相乘	--	https://leetcode-cn.com/problems/multiply-strings/
 13. 除自身以外数组的乘积	--	https://leetcode-cn.com/problems/product-of-array-except-self/
 14. 二叉树的右视图	--	https://leetcode-cn.com/problems/binary-tree-right-side-view/
+15. 逃离大迷宫	--	https://leetcode-cn.com/problems/escape-a-large-maze/
+16. 有效的括号	--	https://leetcode-cn.com/problems/valid-parentheses/
+17. 组合总和 III	--	https://leetcode-cn.com/problems/combination-sum-iii/
+18. 二叉搜索树中第K小的元素	--	https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/
 */
 
 /*
@@ -1025,4 +1030,265 @@ func rightSideView(root *TreeNode) []int {
 		j++
 	}
 	return ret
+}
+
+/*
+15. 逃离大迷宫
+在一个 10^6 x 10^6 的网格中，每个网格块的坐标为 (x, y)，其中 0 <= x, y < 10^6。
+我们从源方格 source 开始出发，意图赶往目标方格 target。每次移动，我们都可以走到网格中在四个方向上相邻的方格，只要该方格不在给出的封锁列表blocked上。
+只有在可以通过一系列的移动到达目标方格时才返回true。否则，返回false。
+
+示例 1：
+输入：blocked = [[0,1],[1,0]], source = [0,0], target = [0,2]
+输出：false
+解释：
+从源方格无法到达目标方格，因为我们无法在网格中移动。
+
+示例 2：
+输入：blocked = [], source = [0,0], target = [999999,999999]
+输出：true
+解释：
+因为没有方格被封锁，所以一定可以到达目标方格。
+
+提示：
+0 <= blocked.length <= 200
+blocked[i].length == 2
+0 <= blocked[i][j] < 10^6
+source.length == target.length == 2
+0 <= source[i][j], target[i][j] < 10^6
+source != target
+*/
+type pos struct {
+	x, y int
+}
+
+func makePos(a []int) pos {
+	return pos{a[0], a[1]}
+}
+
+func (this pos) right() pos {
+	return pos{this.x + 1, this.y}
+}
+func (this pos) left() pos {
+	return pos{this.x - 1, this.y}
+}
+func (this pos) up() pos {
+	return pos{this.x, this.y - 1}
+}
+func (this pos) down() pos {
+	return pos{this.x, this.y + 1}
+}
+func (this pos) arrive(a []int) bool {
+	return this.x == a[0] && this.y == a[1]
+}
+func (this pos) isBlocked(blocked [][]int) bool {
+	for _, val := range blocked {
+		if this.arrive(val) {
+			return true
+		}
+	}
+	return false
+}
+func (this pos) toString() string {
+	return fmt.Sprintf("%d:%d", this.x, this.y)
+}
+func (this pos) toArray() []int {
+	return []int{this.x, this.y}
+}
+
+var limit = math.Pow10(6)
+
+func isEscapePossible(blocked [][]int, source []int, target []int) bool {
+	if len(blocked) == 0 {
+		return true
+	}
+	return isEscapePossibleFun(blocked, source, target) && isEscapePossibleFun(blocked, target, source)
+}
+
+func isEscapePossibleFun(blocked [][]int, source []int, target []int) bool {
+	stack := [][]int{source}
+	seen := map[string]bool{}
+	for len(stack) != 0 {
+		if len(seen) == 20000 {
+			return true
+		}
+		now := makePos(stack[0])
+		seen[now.toString()] = true
+		right := now.right()
+		left := now.left()
+		up := now.up()
+		down := now.down()
+		if right.arrive(target) || left.arrive(target) || up.arrive(target) || down.arrive(target) {
+			return true
+		}
+		if _, ok := seen[right.toString()]; !ok && !right.isBlocked(blocked) && float64(right.x) < limit {
+			seen[right.toString()] = true
+			stack = append(stack, right.toArray())
+		}
+		if _, ok := seen[left.toString()]; !ok && !left.isBlocked(blocked) && left.x >= 0 {
+			seen[left.toString()] = true
+			stack = append(stack, left.toArray())
+		}
+		if _, ok := seen[up.toString()]; !ok && !up.isBlocked(blocked) && up.y >= 0 {
+			seen[up.toString()] = true
+			stack = append(stack, up.toArray())
+		}
+		if _, ok := seen[down.toString()]; !ok && !down.isBlocked(blocked) && float64(down.y) < limit {
+			seen[down.toString()] = true
+			stack = append(stack, down.toArray())
+		}
+		stack = stack[1:]
+	}
+	return false
+}
+
+/*
+16. 有效的括号
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+
+有效字符串需满足：
+左括号必须用相同类型的右括号闭合。
+左括号必须以正确的顺序闭合。
+注意空字符串可被认为是有效字符串。
+
+示例 1:
+输入: "()"		输出: true
+示例 2:
+输入: "()[]{}"	输出: true
+示例 3:
+输入: "(]"		输出: false
+示例 4:
+输入: "([)]"	输出: false
+示例 5:
+输入: "{[]}"	输出: true
+*/
+func isValid(s string) bool {
+	stack := make([]rune, 0)
+	for _, v := range s {
+		if v == '(' || v == '{' || v == '[' {
+			stack = append(stack, v)
+			continue
+		}
+		if v == ')' || v == '}' || v == ']' {
+			if len(stack) == 0 {
+				return false
+			}
+			pv := stack[len(stack)-1]
+			pair := string([]rune{pv, v})
+			if pair != "()" && pair != "{}" && pair != "[]" {
+				fmt.Println(pair)
+				return false
+			}
+			stack = stack[0 : len(stack)-1]
+		}
+	}
+	if len(stack) != 0 {
+		return false
+	}
+	return true
+}
+
+/*
+17. 组合总和 III
+找出所有相加之和为n的k个数的组合。组合中只允许含有1 - 9的正整数，并且每种组合中不存在重复的数字。
+
+说明：
+所有数字都是正整数。
+解集不能包含重复的组合。
+示例 1:
+输入: k = 3, n = 7		输出: [[1,2,4]]
+示例 2:
+输入: k = 3, n = 9		输出: [[1,2,6], [1,3,5], [2,3,4]]
+*/
+func combinationSum3(k int, n int) [][]int {
+	return comb(k, n, 0)
+}
+
+func comb(k, n, i int) [][]int {
+	if k == 1 && n <= 9 {
+		return [][]int{[]int{n}}
+	}
+	if n > 9 && k == 1 {
+		return nil
+	}
+	ret := [][]int{}
+	var limit int
+	if n%k == 0 {
+		limit = n / k
+	} else {
+		limit = n/k + 1
+	}
+	for j := i + 1; j < limit; j++ {
+		inner := comb(k-1, n-j, j)
+		if inner == nil {
+			continue
+		}
+		for _, v := range inner {
+			tmp := []int{j}
+			tmp = append(tmp, v...)
+			ret = append(ret, tmp)
+		}
+	}
+	return ret
+}
+
+/*
+18. 二叉搜索树中第K小的元素
+给定一个二叉搜索树，编写一个函数 kthSmallest 来查找其中第 k 个最小的元素。
+
+说明：
+你可以假设k总是有效的，1 ≤ k ≤ 二叉搜索树元素个数。
+
+示例 1:
+输入: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+输出: 1
+示例 2:
+输入: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+输出: 3
+进阶：
+如果二叉搜索树经常被修改（插入/删除操作）并且你需要频繁地查找第 k 小的值，你将如何优化 kthSmallest 函数？
+*/
+func kthSmallest(root *TreeNode, k int) int {
+	var getMin func(*TreeNode, int) int
+	getMin = func(r *TreeNode, i int) int {
+		ret := r.Val
+		if r.Left != nil {
+			var leftMin int
+			leftMin = getMin(r.Left, i)
+			if leftMin > i && leftMin < ret {
+				ret = leftMin
+				return ret
+			}
+		}
+		if r.Right != nil {
+			var rightMin int
+			rightMin = getMin(r.Right, i)
+			if ret <= i && rightMin > i {
+				ret = rightMin
+			}
+		}
+		return ret
+	}
+	smallStack := make([]int, 0)
+	for len(smallStack) < k {
+		upNum := -1
+		if len(smallStack) != 0 {
+			upNum = smallStack[len(smallStack)-1]
+		}
+		get := getMin(root, upNum)
+		smallStack = append(smallStack, get)
+	}
+	return smallStack[k-1]
 }

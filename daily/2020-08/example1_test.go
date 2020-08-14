@@ -101,3 +101,25 @@ func Test_multiply(t *testing.T) {
 func Test_productExceptSelf(t *testing.T) {
 	t.Log(productExceptSelf1([]int{1, 2, 3, 4}))
 }
+
+func Test_isEscapePossible(t *testing.T) {
+	t.Log(isEscapePossible(
+		[][]int{[]int{0, 1}, []int{1, 0}},
+		[]int{0, 0},
+		[]int{0, 2},
+	))
+	t.Log(isEscapePossible(
+		[][]int{},
+		[]int{0, 0},
+		[]int{999999, 999999},
+	))
+}
+
+func Test_isValid(t *testing.T) {
+	t.Log(isValid("{[]}"))
+}
+
+func Test_combinationSum3(t *testing.T) {
+	// [[1,5,9],[1,6,8],[2,4,9],[2,5,8],[2,6,7],[3,4,8],[3,5,7],[4,5,6]]
+	t.Log(combinationSum3(3, 15))
+}
