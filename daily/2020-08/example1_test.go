@@ -147,3 +147,11 @@ func Test_addNegabinary(t *testing.T) {
 	t.Log([]int{1, 1, 0, 1}, addNegabinary([]int{1, 1}, []int{1, 0}))
 	t.Log([]int{1, 0, 1, 0}, addNegabinary([]int{1, 1, 1, 1}, []int{1, 1, 1, 1}))
 }
+
+func Test_maxScore(t *testing.T) {
+	t.Log(maxScore("011101"))
+	t.Log(maxScore("00111"))
+	t.Log(maxScore("1111"))
+	t.Log(maxScore("00"))
+
+}

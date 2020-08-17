@@ -31,6 +31,9 @@ func main() {
 18. 二叉搜索树中第K小的元素	--	https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/
 19. 验证二叉树	--	https://leetcode-cn.com/problems/validate-binary-tree-nodes/
 20. 负二进制数相加	--	https://leetcode-cn.com/problems/adding-two-negabinary-numbers/
+21. 移除盒子	--	https://leetcode-cn.com/problems/remove-boxes/
+22. 平衡二叉树	--	https://leetcode-cn.com/problems/balanced-binary-tree/
+23. 分割字符串的最大得分	--	https://leetcode-cn.com/problems/maximum-score-after-splitting-a-string/
 */
 
 /*
@@ -1433,4 +1436,128 @@ func addNegabinary(arr1, arr2 []int) []int {
 		}
 	}
 	return ret
+}
+
+/*
+21. 移除盒子
+给出一些不同颜色的盒子，盒子的颜色由数字表示，即不同的数字表示不同的颜色。
+你将经过若干轮操作去去掉盒子，直到所有的盒子都去掉为止。每一轮你可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k*k 个积分。
+当你将所有盒子都去掉之后，求你能获得的最大积分和。
+
+示例：
+输入：boxes = [1,3,2,2,2,3,4,3,1]
+输出：23
+解释：
+[1, 3, 2, 2, 2, 3, 4, 3, 1]
+----> [1, 3, 3, 4, 3, 1] (3*3=9 分)
+----> [1, 3, 3, 3, 1] (1*1=1 分)
+----> [1, 1] (3*3=9 分)
+----> [] (2*2=4 分)
+
+提示：
+1 <= boxes.length <= 100
+1 <= boxes[i] <= 100
+*/
+func removeBoxes(boxes []int) int {
+	return 0
+}
+
+/*
+22. 平衡二叉树
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+本题中，一棵高度平衡二叉树定义为：
+一个二叉树每个节点的左右两个子树的高度差的绝对值不超过1。
+
+示例 1:
+给定二叉树 [3,9,20,null,null,15,7]
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回 true 。
+示例 2:
+给定二叉树 [1,2,2,3,3,null,null,4,4]
+
+       1
+      / \
+     2   2
+    / \
+   3   3
+  / \
+ 4   4
+返回 false 。
+*/
+func isBalanced(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	rDep := treeNodeDep(root.Right)
+	lDep := treeNodeDep(root.Left)
+	if rDep-lDep > 1 || lDep-rDep > 1 {
+		return false
+	}
+	return isBalanced(root.Right) && isBalanced(root.Left)
+}
+
+func treeNodeDep(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	dep := treeNodeDep(root.Right)
+	lDep := treeNodeDep(root.Left)
+	if lDep > dep {
+		dep = lDep
+	}
+	return dep + 1
+}
+
+/*
+23. 分割字符串的最大得分
+给你一个由若干 0 和 1 组成的字符串 s ，请你计算并返回将该字符串分割成两个非空子字符串（即左子字符串和右子字符串）所能获得的最大得分。
+「分割字符串的得分」为左子字符串中0 的数量加上右子字符串中1的数量。
+
+示例 1：
+输入：s = "011101"
+输出：5
+解释：
+将字符串 s 划分为两个非空子字符串的可行方案有：
+左子字符串 = "0" 且 右子字符串 = "11101"，得分 = 1 + 4 = 5
+左子字符串 = "01" 且 右子字符串 = "1101"，得分 = 1 + 3 = 4
+左子字符串 = "011" 且 右子字符串 = "101"，得分 = 1 + 2 = 3
+左子字符串 = "0111" 且 右子字符串 = "01"，得分 = 1 + 1 = 2
+左子字符串 = "01110" 且 右子字符串 = "1"，得分 = 2 + 1 = 3
+示例 2：
+输入：s = "00111"
+输出：5
+解释：当 左子字符串 = "00" 且 右子字符串 = "111" 时，我们得到最大得分 = 2 + 3 = 5
+示例 3：
+输入：s = "1111"
+输出：3
+
+提示：
+2 <= s.length <= 500
+字符串 s 仅由字符 '0' 和 '1' 组成。
+*/
+func maxScore(s string) int {
+	ones := 0
+	for _, v := range s {
+		if v == '1' {
+			ones++
+		}
+	}
+	var max, zeros int
+	for i := 0; i < len(s)-1; i++ {
+		if s[i] == '0' {
+			zeros++
+		} else {
+			ones--
+		}
+		tmp := zeros + ones
+		if max < tmp {
+			max = tmp
+		}
+	}
+	return max
 }
