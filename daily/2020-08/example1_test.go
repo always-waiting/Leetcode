@@ -155,3 +155,12 @@ func Test_maxScore(t *testing.T) {
 	t.Log(maxScore("00"))
 
 }
+
+func Test_accountsMerge(t *testing.T) {
+	t.Log(accountsMerge([][]string{
+		[]string{"John", "johnsmith@mail.com", "john_newyork@mail.com"},
+		[]string{"John", "johnsmith@mail.com", "john00@mail.com"},
+		[]string{"John", "johnnybravo@mail.com"},
+		[]string{"Mary", "mary@mail.com"},
+	}))
+}
