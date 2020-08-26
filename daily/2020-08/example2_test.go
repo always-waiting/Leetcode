@@ -27,3 +27,15 @@ func Test_updateBoard(t *testing.T) {
 	}
 	t.Log(updateBoard(board, []int{3, 0}))
 }
+
+func Test_repeatedSubstringPattern(t *testing.T) {
+	t.Log(repeatedSubstringPattern("aabaab"))
+}
+
+func Test_findSubsequences(t *testing.T) {
+	t.Log(findSubsequences([]int{4, 6, 7, 7}))
+}
+
+func Test_letterCombinations(t *testing.T) {
+	t.Log(letterCombinations("23"))
+}

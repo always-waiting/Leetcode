@@ -13,6 +13,9 @@ func example2() {
 2. 回文子串	--	https://leetcode-cn.com/problems/palindromic-substrings/ undo!!
 3. 扫雷游戏	--	https://leetcode-cn.com/problems/minesweeper/
 4. 二叉树的最小深度	--	https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/
+5. 重复的子字符串	--	https://leetcode-cn.com/problems/repeated-substring-pattern/
+6. 递增子序列	--	https://leetcode-cn.com/problems/increasing-subsequences/
+7. 电话号码的字母组合	--	https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/
 */
 
 /*
@@ -237,3 +240,199 @@ func minDepth(root *TreeNode) int {
 	}
 	return ret
 }
+
+/*
+5. 重复的子字符串
+给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
+
+示例 1:
+输入: "abab"
+输出: True
+解释: 可由子字符串 "ab" 重复两次构成。
+示例 2:
+输入: "aba"
+输出: False
+示例 3:
+输入: "abcabcabcabc"
+输出: True
+解释: 可由子字符串 "abc" 重复四次构成。 (或者子字符串 "abcabc" 重复两次构成。)
+*/
+// KMP 算法为最优解!	--	https://zh.wikipedia.org/wiki/%E5%85%8B%E5%8A%AA%E6%96%AF-%E8%8E%AB%E9%87%8C%E6%96%AF-%E6%99%AE%E6%8B%89%E7%89%B9%E7%AE%97%E6%B3%95
+func repeatedSubstringPattern(s string) bool {
+	for i := 0; i < len(s)/2; i++ {
+		idx := 0
+		tmp := true
+		for j := i + 1; j < len(s); j++ {
+			if s[j] != s[idx] {
+				tmp = false
+				break
+			} else {
+				idx++
+				if idx%(i+1) == 0 {
+					idx = 0
+				}
+			}
+		}
+		if tmp && idx == 0 {
+			return tmp
+		}
+	}
+	return false
+}
+
+/*
+6. 递增子序列
+给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。
+
+示例:
+输入: [4, 6, 7, 7]
+输出: [[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,7,7]]
+说明:
+给定数组的长度不会超过15。
+数组中的整数范围是 [-100,100]。
+给定数组中可能包含重复数字，相等的数字应该被视为递增的一种情况。
+*/
+/*
+遍历全部子序列，查看是否单调递增
+遍历方式：计算出总个数，然后用二进制标识,1表示取，0表示弃
+*/
+var (
+	temp []int
+)
+
+func findSubsequences(nums []int) [][]int {
+	n = len(nums)
+	ans := [][]int{}
+	set := map[int]bool{}
+	// 2的n-1次方 1<<n
+	for i := 0; i < 1<<n; i++ {
+		findSubsequences1(i, nums)
+		hashValue := getHash(263, int(1e9+7))
+		if check() && !set[hashValue] {
+			t := make([]int, len(temp))
+			copy(t, temp)
+			ans = append(ans, t)
+			set[hashValue] = true
+		}
+	}
+	return ans
+}
+
+func findSubsequences1(mask int, nums []int) {
+	temp = []int{}
+	for i := 0; i < n; i++ {
+		if (mask & 1) != 0 { // 对整数的每一位和1求与，即能知道整数对应位的数值
+			temp = append(temp, nums[i])
+		}
+		mask >>= 1 // 右移以便分析每一位
+	}
+}
+
+func getHash(base, mod int) int {
+	hashValue := 0
+	for _, x := range temp {
+		hashValue = hashValue*base%mod + (x + 101)
+		hashValue %= mod
+	}
+	return hashValue
+}
+
+func check() bool {
+	for i := 1; i < len(temp); i++ {
+		if temp[i] < temp[i-1] {
+			return false
+		}
+	}
+	return len(temp) >= 2
+}
+
+/*
+7. 电话号码的字母组合
+给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
+给出数字到字母的映射如下（与电话按键相同）。注意1不对应任何字母。
+
+示例:
+输入："23"
+输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+说明:
+尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。
+*/
+var phone map[byte][]rune = map[byte][]rune{
+	'2': []rune{'a', 'b', 'c'},
+	'3': []rune{'d', 'e', 'f'},
+	'4': []rune{'g', 'h', 'i'},
+	'5': []rune{'j', 'k', 'l'},
+	'6': []rune{'m', 'n', 'o'},
+	'7': []rune{'p', 'q', 'r', 's'},
+	'8': []rune{'t', 'u', 'v'},
+	'9': []rune{'w', 'x', 'y', 'z'},
+}
+
+// 更简介的方式，递归(回溯)!!!
+func letterCombinations(digits string) []string {
+	i := 0
+	retByte := [][]rune{[]rune(digits)}
+	for i != len(digits) {
+		transfer := phone[digits[i]]
+		tmp := [][]rune{}
+		for _, tpl := range retByte {
+			for _, alpha := range transfer {
+				a := make([]rune, len(tpl))
+				for j, _ := range tpl {
+					if j == i {
+						a[j] = alpha
+					} else {
+						a[j] = tpl[j]
+					}
+				}
+				tmp = append(tmp, a)
+			}
+		}
+		retByte = tmp
+		i++
+	}
+	ret := []string{}
+	for _, tpl := range retByte {
+		if string(tpl) != "" {
+			ret = append(ret, string(tpl))
+		}
+	}
+	return ret
+}
+
+/*
+var phoneMap map[string]string = map[string]string{
+    "2": "abc",
+    "3": "def",
+    "4": "ghi",
+    "5": "jkl",
+    "6": "mno",
+    "7": "pqrs",
+    "8": "tuv",
+    "9": "wxyz",
+}
+
+var combinations []string
+
+func letterCombinations(digits string) []string {
+    if len(digits) == 0 {
+        return []string{}
+    }
+    combinations = []string{}
+    backtrack(digits, 0, "")
+    return combinations
+}
+
+func backtrack(digits string, index int, combination string) {
+    if index == len(digits) {
+        combinations = append(combinations, combination)
+    } else {
+        digit := string(digits[index])
+        letters := phoneMap[digit]
+        lettersCount := len(letters)
+        for i := 0; i < lettersCount; i++ {
+            backtrack(digits, index + 1, combination + string(letters[i]))
+        }
+    }
+}
+*/
