@@ -39,3 +39,11 @@ func Test_findSubsequences(t *testing.T) {
 func Test_letterCombinations(t *testing.T) {
 	t.Log(letterCombinations("23"))
 }
+
+func Test_findItinerary(t *testing.T) {
+	t.Log(findItinerary([][]string{
+		//[]string{"JFK", "KUL"}, []string{"JFK", "NRT"}, []string{"NRT", "JFK"},
+		[]string{"JFK", "SFO"}, []string{"JFK", "ATL"}, []string{"SFO", "ATL"},
+		[]string{"ATL", "JFK"}, []string{"ATL", "SFO"},
+	}))
+}

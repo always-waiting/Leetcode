@@ -16,6 +16,7 @@ func example2() {
 5. 重复的子字符串	--	https://leetcode-cn.com/problems/repeated-substring-pattern/
 6. 递增子序列	--	https://leetcode-cn.com/problems/increasing-subsequences/
 7. 电话号码的字母组合	--	https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/
+8. 重新安排行程	--	https://leetcode-cn.com/problems/reconstruct-itinerary/
 */
 
 /*
@@ -434,5 +435,91 @@ func backtrack(digits string, index int, combination string) {
             backtrack(digits, index + 1, combination + string(letters[i]))
         }
     }
+}
+*/
+
+/*
+8. 重新安排行程
+给定一个机票的字符串二维数组 [from, to]，子数组中的两个成员分别表示飞机出发和降落的机场地点，
+对该行程进行重新规划排序。所有这些机票都属于一个从JFK（肯尼迪国际机场）出发的先生，所以该行程必须从JFK 开始。
+
+说明:
+如果存在多种有效的行程，你可以按字符自然排序返回最小的行程组合。例如，行程 ["JFK", "LGA"] 与 ["JFK", "LGB"] 相比就更小，排序更靠前
+所有的机场都用三个大写字母表示（机场代码）。
+假定所有机票至少存在一种合理的行程。
+示例 1:
+输入: [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+输出: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+示例 2:
+输入: [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+输出: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+解释: 另一种有效的行程是 ["JFK","SFO","ATL","JFK","ATL","SFO"]。但是它自然排序更大更靠后。
+*/
+// 超时!
+func findItinerary(tickets [][]string) []string {
+	ret := findItineraryWithStart(tickets, "JFK")
+	return ret
+}
+
+func findItineraryWithStart(tickets [][]string, start string) []string {
+	ret := []string{start}
+	if len(tickets) == 0 {
+		return ret
+	}
+	var minNext []string
+	for i, t := range tickets {
+		if t[0] == start {
+			nTickets := [][]string{}
+			for j := 0; j < len(tickets); j++ {
+				if j != i {
+					nTickets = append(nTickets, tickets[j])
+				}
+			}
+			next := findItineraryWithStart(nTickets, t[1])
+			if next != nil && (minNext == nil || minNext[0] > next[0]) {
+				minNext = next
+			}
+		}
+	}
+	if minNext == nil {
+		return nil
+	}
+	ret = append(ret, minNext...)
+	return ret
+}
+
+/*
+func findItinerary(tickets [][]string) []string {
+    var (
+        m  = map[string][]string{}
+        res []string
+    )
+
+    for _, ticket := range tickets {
+        src, dst := ticket[0], ticket[1]
+        m[src] = append(m[src], dst)
+    }
+    for key := range m {
+        sort.Strings(m[key])
+    }
+
+    var dfs func(curr string)
+    dfs = func(curr string) {
+        for {
+            if v, ok := m[curr]; !ok || len(v) == 0 {
+                break
+            }
+            tmp := m[curr][0]
+            m[curr] = m[curr][1:]
+            dfs(tmp)
+        }
+        res = append(res, curr)
+    }
+
+    dfs("JFK")
+    for i := 0; i < len(res)/2; i++ {
+        res[i], res[len(res) - 1 - i] = res[len(res) - 1 - i], res[i]
+    }
+    return res
 }
 */
