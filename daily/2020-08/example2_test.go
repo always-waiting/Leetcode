@@ -47,3 +47,18 @@ func Test_findItinerary(t *testing.T) {
 		[]string{"ATL", "JFK"}, []string{"ATL", "SFO"},
 	}))
 }
+
+func Test_canVisitAllRooms(t *testing.T) {
+	t.Log(canVisitAllRooms([][]int{
+		[]int{1},
+		[]int{2},
+		[]int{3},
+		[]int{},
+	}))
+	t.Log(canVisitAllRooms([][]int{
+		[]int{1, 3},
+		[]int{3, 0, 1},
+		[]int{2},
+		[]int{0},
+	}))
+}
