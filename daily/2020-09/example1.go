@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"container/heap"
+	"fmt"
+)
 
 func main() {
 	fmt.Println("vim-go")
@@ -11,7 +14,8 @@ func main() {
 
 /*
 1. 预测赢家		--	https://leetcode-cn.com/problems/predict-the-winner/
-2. 表示数值的字符串		https://leetcode-cn.com/problems/biao-shi-shu-zhi-de-zi-fu-chuan-lcof/
+2. 表示数值的字符串		--	https://leetcode-cn.com/problems/biao-shi-shu-zhi-de-zi-fu-chuan-lcof/
+3. 前 K 个高频元素		--	https://leetcode-cn.com/problems/top-k-frequent-elements/
 */
 
 /*
@@ -176,4 +180,180 @@ func isNumber(s string) bool {
 		}
 	}
 	return state == STATE_INTEGER || state == STATE_POINT || state == STATE_FRACTION || state == STATE_EXP_NUMBER || state == STATE_END
+}
+
+/*
+3. N 皇后
+n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+上图为 8 皇后问题的一种解法。
+给定一个整数 n，返回所有不同的 n 皇后问题的解决方案。
+每一种解法包含一个明确的 n 皇后问题的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+
+示例：
+输入：4
+输出：[
+ [".Q..",  // 解法 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // 解法 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+解释: 4 皇后问题存在两个不同的解法。
+提示：
+皇后彼此不能相互攻击，也就是说：任何两个皇后都不能处于同一条横行、纵行或斜线上。
+*/
+func solveNQueens(n int) [][]string {
+	return nil
+}
+
+/*
+257. 二叉树的所有路径
+给定一个二叉树，返回所有从根节点到叶子节点的路径。
+说明: 叶子节点是指没有子节点的节点。
+
+示例:
+输入:
+
+   1
+ /   \
+2     3
+ \
+  5
+
+输出: ["1->2->5", "1->3"]
+解释: 所有根节点到叶子节点的路径为: 1->2->5, 1->3
+*/
+/**
+ * Definition for a binary tree node.
+ */
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func binaryTreePaths(root *TreeNode) []string {
+	if root == nil {
+		return []string{}
+	}
+	if root.Left == nil && root.Right == nil {
+		return []string{fmt.Sprintf("%d", root.Val)}
+	}
+	ret := []string{}
+	if root.Left != nil {
+		tmp := binaryTreePaths(root.Left)
+		for _, val := range tmp {
+			ret = append(ret, fmt.Sprintf("%d->%s", root.Val, val))
+		}
+	}
+	if root.Right != nil {
+		tmp := binaryTreePaths(root.Right)
+		for _, val := range tmp {
+			ret = append(ret, fmt.Sprintf("%d->%s", root.Val, val))
+		}
+	}
+	return ret
+}
+
+/*
+3. 前 K 个高频元素
+给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+
+示例 1:
+输入: nums = [1,1,1,2,2,3], k = 2
+输出: [1,2]
+示例 2:
+输入: nums = [1], k = 1
+输出: [1]
+
+提示：
+你可以假设给定的 k 总是合理的，且 1 ≤ k ≤ 数组中不相同的元素的个数。
+你的算法的时间复杂度必须优于 O(n log n) , n 是数组的大小。
+题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的。
+你可以按任意顺序返回答案。
+*/
+func topKFrequent(nums []int, k int) []int {
+	freq := make([]map[int]bool, len(nums)+1)
+	freqM := map[int]int{}
+	maxFreq := 0
+	for _, val := range nums {
+		if _, ok := freqM[val]; ok {
+			freqM[val]++
+		} else {
+			freqM[val] = 1
+		}
+		if maxFreq < freqM[val] {
+			maxFreq = freqM[val]
+		}
+		idx := freqM[val] - 1
+		if _, ok := freq[idx][val]; ok {
+			delete(freq[idx], val)
+		}
+		if freq[freqM[val]] == nil {
+			freq[freqM[val]] = map[int]bool{val: true}
+		} else {
+			freq[freqM[val]][val] = true
+		}
+	}
+	ret := []int{}
+	for len(ret) != k {
+		tmp := freq[maxFreq]
+		for i, _ := range tmp {
+			if len(ret) == k {
+				break
+			}
+			ret = append(ret, i)
+		}
+		maxFreq--
+	}
+	return ret
+}
+
+// 最小堆
+func topKFrequent1(nums []int, k int) []int {
+	occurrences := map[int]int{}
+	for _, num := range nums {
+		occurrences[num]++
+	}
+	h := &IHeap{}
+	heap.Init(h)
+	for key, value := range occurrences {
+		heap.Push(h, [2]int{key, value})
+		if h.Len() > k {
+			heap.Pop(h)
+		}
+	}
+	/*
+		// 最小堆，堆顶为最小值
+		for h.Len() > 0 {
+			fmt.Printf("%v\n", heap.Pop(h))
+		}
+	*/
+	ret := make([]int, k)
+	for i := 0; i < k; i++ {
+		ret[k-i-1] = heap.Pop(h).([2]int)[0]
+	}
+	return ret
+}
+
+type IHeap [][2]int
+
+func (h IHeap) Len() int           { return len(h) }
+func (h IHeap) Less(i, j int) bool { return h[i][1] < h[j][1] }
+func (h IHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *IHeap) Push(x interface{}) {
+	*h = append(*h, x.([2]int))
+}
+
+func (h *IHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
 }

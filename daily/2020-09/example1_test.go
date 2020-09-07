@@ -19,3 +19,9 @@ func Test_isNumber(t *testing.T) {
 	t.Log("+-5", isNumber("+-5"))
 	t.Log("12e5.4", isNumber("12e+5.4"))
 }
+
+func Test_topKFrequent(t *testing.T) {
+	//t.Log(topKFrequent([]int{1, 1, 1, 2, 2, 3}, 2))
+	//t.Log(topKFrequent([]int{1}, 1))
+	t.Log(topKFrequent1([]int{1, 1, 1, 2, 2, 3}, 2))
+}
