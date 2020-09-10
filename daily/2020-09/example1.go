@@ -3,6 +3,7 @@ package main
 import (
 	"container/heap"
 	"fmt"
+	"sort"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 1. 预测赢家		--	https://leetcode-cn.com/problems/predict-the-winner/
 2. 表示数值的字符串		--	https://leetcode-cn.com/problems/biao-shi-shu-zhi-de-zi-fu-chuan-lcof/
 3. 前 K 个高频元素		--	https://leetcode-cn.com/problems/top-k-frequent-elements/
+4. 组合总和 II		--	https://leetcode-cn.com/problems/combination-sum-ii/
 */
 
 /*
@@ -356,4 +358,101 @@ func (h *IHeap) Pop() interface{} {
 	x := old[n-1]
 	*h = old[0 : n-1]
 	return x
+}
+
+/*
+4. 组合总和 II
+给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+candidates 中的每个数字在每个组合中只能使用一次。
+说明：
+所有数字（包括目标数）都是正整数。
+解集不能包含重复的组合。
+示例 1:
+输入: candidates = [10,1,2,7,6,1,5], target = 8,
+所求解集为:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+示例 2:
+输入: candidates = [2,5,2,1,2], target = 5,
+所求解集为:
+[
+  [1,2,2],
+  [5]
+]
+*/
+func combinationSum2(candidates []int, target int) [][]int {
+	sort.Ints(candidates)
+	cand := make([][]int, 0)
+	ret := make([][]int, 0)
+	seen := map[string]bool{}
+	for i := 0; i < len(candidates); i++ {
+		val := candidates[i]
+		if len(cand) != 0 {
+			nextCand := [][]int{}
+			for _, vals := range cand {
+				if val == 5 {
+					fmt.Printf("Cand: %#v + %d\n", vals, val)
+				}
+				tmp := []int{}
+				for _, ival := range vals {
+					tmp = append(tmp, ival)
+				}
+				tmp = append(tmp, val)
+				/*
+					}
+					for j := 0; j < len(cand); j++ {
+					tmp := append(cand[j], val)
+				*/
+				res := sum(tmp)
+				if res < target {
+					key := fmt.Sprintf("%v", tmp)
+					if _, ok := seen[key]; !ok {
+						nextCand = append(nextCand, tmp)
+						seen[key] = true
+					}
+				} else if res == target {
+					key := fmt.Sprintf("%v", tmp)
+					if _, ok := seen[key]; !ok {
+						fmt.Printf("%s ----> %#v\n", key, tmp)
+						//fmt.Printf("before: %#v\n", ret)
+						ret = append(ret, tmp)
+						seen[key] = true
+						//fmt.Printf("after: %#v\n", ret)
+					}
+				}
+				if val == 5 {
+					//fmt.Printf("Every Inner Loop: %#v -- %#v\n", cand[j], ret)
+					fmt.Printf("Every Inner Loop: %#v\n", ret)
+				}
+			}
+			cand = append(cand, nextCand...)
+		}
+		if val < target {
+			key := fmt.Sprintf("%v", []int{val})
+			if _, ok := seen[key]; !ok {
+				cand = append(cand, []int{val})
+				seen[key] = true
+			}
+		} else if val == target {
+			key := fmt.Sprintf("%v", []int{val})
+			if _, ok := seen[key]; !ok {
+				ret = append(ret, []int{val})
+				seen[key] = true
+			}
+		}
+		fmt.Printf("Every Loop: %#v\n", ret)
+	}
+	return ret
+}
+
+func sum(in []int) int {
+	ret := 0
+	for _, val := range in {
+		ret += val
+	}
+	return ret
 }

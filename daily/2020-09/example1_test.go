@@ -25,3 +25,9 @@ func Test_topKFrequent(t *testing.T) {
 	//t.Log(topKFrequent([]int{1}, 1))
 	t.Log(topKFrequent1([]int{1, 1, 1, 2, 2, 3}, 2))
 }
+
+func Test_combinationSum2(t *testing.T) {
+	t.Log(combinationSum2([]int{1, 1, 1, 3, 3, 5}, 8))
+	// [[1 7] [2 6] [7 1] [1 6 1] [1 2 5] [2 1 5]]
+	//t.Log(combinationSum2([]int{2, 5, 2, 1, 2}, 5))
+}
