@@ -11,3 +11,18 @@ func TestMergeKArray(t *testing.T) {
 	ret := mergeKArray(input, 3)
 	t.Log(ret)
 }
+
+func Test_longestSubStr(t *testing.T) {
+	t.Log(longestSubStr("aaabcdab"))
+}
+
+func Test_TrieNode(t *testing.T) {
+	root := newTrieNode()
+	root.Add("and")
+	root.Add("as")
+	root.Add("at")
+	root.Add("cn")
+	root.Add("com")
+	root.Add("codcdme")
+	t.Logf("%v", root.search("cod"))
+}

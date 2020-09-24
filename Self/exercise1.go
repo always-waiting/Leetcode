@@ -1,7 +1,13 @@
 package Self
 
+import (
+	"fmt"
+)
+
 /*
 1. 合并k个有序数组 -- mergeKArray
+2. 最长不重复字串
+3, 字符串的前缀树
 */
 
 /*
@@ -80,4 +86,101 @@ func mergeKArray(input [][]int, k int) (ret []int) {
 
 	}
 	return
+}
+
+/*
+查找一个字串的最大不重复字串
+*/
+
+func longestSubStr(s string) (ret string) {
+	if len(s) == 0 {
+		return ""
+	}
+	seenMap := map[rune]int{}
+	var start, end int
+	for i, val := range s {
+		if idx, ok := seenMap[val]; ok {
+			if end-start > len(ret) {
+				ret = s[start:end]
+			}
+			seenMap[val] = i
+			if start <= idx {
+				start = idx + 1
+			}
+		} else {
+			seenMap[val] = i
+		}
+		end++
+	}
+	if end-start > len(ret) {
+		ret = s[start:end]
+	}
+	return ret
+}
+
+/*
+字符串的前缀树
+*/
+type TrieNode struct {
+	val  string
+	next []*TrieNode
+}
+
+func newTrieNode() *TrieNode {
+	ret := &TrieNode{}
+	ret.next = make([]*TrieNode, 0)
+	return ret
+}
+
+func (this *TrieNode) Add(s string) {
+	if len(s) == 0 {
+		return
+	}
+	s0 := string(s[0])
+	var has bool
+	for _, n := range this.next {
+		if n.val == s0 {
+			has = true
+			n.Add(s[1:])
+		}
+	}
+	if !has {
+		n := &TrieNode{val: s0, next: []*TrieNode{}}
+		n.Add(s[1:])
+		this.next = append(this.next, n)
+	}
+}
+
+func (this *TrieNode) print() {
+	fmt.Println(this.val)
+	for _, n := range this.next {
+		n.print()
+	}
+}
+
+func (this *TrieNode) search(s string) (ret []string) {
+	ret = make([]string, 0)
+	if len(s) == 0 {
+		if len(this.next) == 0 {
+			return []string{""}
+		}
+		for _, n := range this.next {
+			tmp := n.search(s)
+			for _, tmpStr := range tmp {
+				ret = append(ret, n.val+tmpStr)
+			}
+		}
+		return ret
+	}
+	s0 := string(s[0])
+	for _, n := range this.next {
+		if n.val != s0 {
+			continue
+		}
+		tmp := n.search(s[1:])
+		for _, tmpStr := range tmp {
+			ret = append(ret, s0+tmpStr)
+		}
+	}
+	return ret
 }
