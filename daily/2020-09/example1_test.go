@@ -31,3 +31,8 @@ func Test_combinationSum2(t *testing.T) {
 	// [[1 7] [2 6] [7 1] [1 6 1] [1 2 5] [2 1 5]]
 	//t.Log(combinationSum2([]int{2, 5, 2, 1, 2}, 5))
 }
+
+func Test_buildTree(t *testing.T) {
+	root := buildTree([]int{9, 3, 15, 20, 7}, []int{9, 15, 7, 20, 3})
+	t.Log(root.Right.Left)
+}
