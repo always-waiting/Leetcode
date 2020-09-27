@@ -7,7 +7,9 @@ import (
 /*
 1. 合并k个有序数组 -- mergeKArray
 2. 最长不重复字串
-3, 字符串的前缀树
+3. 字符串的前缀树
+4. 目标和
+5. 在每个树行中找最大值		--	https://leetcode-cn.com/problems/find-largest-value-in-each-tree-row/submissions/
 */
 
 /*
@@ -180,6 +182,89 @@ func (this *TrieNode) search(s string) (ret []string) {
 		tmp := n.search(s[1:])
 		for _, tmpStr := range tmp {
 			ret = append(ret, s0+tmpStr)
+		}
+	}
+	return ret
+}
+
+/*
+4. 给出一个数组和一个target，返回所有和为target的组合
+
+示例1:
+输入: [7,2,3,4,5] target = 9
+输出: [7,2], [2,3,4], [4,5]
+*/
+func getSumList(in []int, target int) (ret [][]int) {
+	ret = make([][]int, 0)
+	for i := 0; i < len(in); i++ {
+		if in[i] == target {
+			ret = append(ret, []int{in[i]})
+		}
+	}
+	for i := 0; i < len(in)-1; i++ {
+		tmp := target - in[i]
+		tmpRes := getSumList(in[i+1:], tmp)
+		if tmpRes != nil {
+			for _, val := range tmpRes {
+				ret = append(ret, append([]int{in[i]}, val...))
+			}
+		}
+	}
+	if len(ret) == 0 {
+		ret = nil
+	}
+	return
+}
+
+/*
+5. 返回一个二叉树每层的最大值
+*/
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func largestValues(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	levelVals := getLevels(root)
+	ret := []int{}
+	for i := 0; i < len(levelVals); i++ {
+		max := getMax(levelVals[i])
+		ret = append(ret, max)
+	}
+	return ret
+}
+
+func getMax(in []int) int {
+	a := in[0]
+	for i := 1; i < len(in); i++ {
+		if a < in[i] {
+			a = in[i]
+		}
+	}
+	return a
+}
+
+func getLevels(root *TreeNode) [][]int {
+	if root == nil {
+		return nil
+	}
+	ret := [][]int{[]int{root.Val}}
+	left := getLevels(root.Left)
+	right := getLevels(root.Right)
+	for i := 0; i < len(left); i++ {
+		tmp := left[i]
+		if i < len(right) {
+			tmp = append(tmp, right[i]...)
+		}
+		ret = append(ret, tmp)
+	}
+	if len(left) < len(right) {
+		for i := len(left); i < len(right); i++ {
+			ret = append(ret, right[i])
 		}
 	}
 	return ret

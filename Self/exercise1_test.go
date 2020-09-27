@@ -26,3 +26,7 @@ func Test_TrieNode(t *testing.T) {
 	root.Add("codcdme")
 	t.Logf("%v", root.search("cod"))
 }
+
+func Test_getSumList(t *testing.T) {
+	t.Log(getSumList([]int{10, 1, 2, 7, 6, 1, 5}, 9))
+}

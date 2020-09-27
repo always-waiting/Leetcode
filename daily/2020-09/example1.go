@@ -397,9 +397,6 @@ func combinationSum2(candidates []int, target int) [][]int {
 		if len(cand) != 0 {
 			nextCand := [][]int{}
 			for _, vals := range cand {
-				if val == 5 {
-					fmt.Printf("Cand: %#v + %d\n", vals, val)
-				}
 				tmp := []int{}
 				for _, ival := range vals {
 					tmp = append(tmp, ival)
@@ -420,16 +417,9 @@ func combinationSum2(candidates []int, target int) [][]int {
 				} else if res == target {
 					key := fmt.Sprintf("%v", tmp)
 					if _, ok := seen[key]; !ok {
-						fmt.Printf("%s ----> %#v\n", key, tmp)
-						//fmt.Printf("before: %#v\n", ret)
 						ret = append(ret, tmp)
 						seen[key] = true
-						//fmt.Printf("after: %#v\n", ret)
 					}
-				}
-				if val == 5 {
-					//fmt.Printf("Every Inner Loop: %#v -- %#v\n", cand[j], ret)
-					fmt.Printf("Every Inner Loop: %#v\n", ret)
 				}
 			}
 			cand = append(cand, nextCand...)
@@ -447,7 +437,6 @@ func combinationSum2(candidates []int, target int) [][]int {
 				seen[key] = true
 			}
 		}
-		fmt.Printf("Every Loop: %#v\n", ret)
 	}
 	return ret
 }
