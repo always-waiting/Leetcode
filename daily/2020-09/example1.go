@@ -19,6 +19,8 @@ func main() {
 3. 前 K 个高频元素		--	https://leetcode-cn.com/problems/top-k-frequent-elements/
 4. 组合总和 II		--	https://leetcode-cn.com/problems/combination-sum-ii/
 5. 从中序与后序遍历序列构造二叉树	--	https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
+6. 最长回文子串		--	https://leetcode-cn.com/problems/longest-palindromic-substring/
+7. 二叉搜索树的最近公共祖先		--	https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 */
 
 /*
@@ -511,4 +513,126 @@ func buildTree(inorder []int, postorder []int) *TreeNode {
 	root.Left = left
 	root.Right = right
 	return root
+}
+
+/*
+最长回文子串
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+
+示例 1：
+输入: "babad"
+输出: "bab"
+注意: "aba" 也是一个有效答案。
+示例 2：
+输入: "cbbd"
+输出: "bb"
+
+还有一个Manacher 算法(没理解呢)
+*/
+// O(n2), O(n2)
+func longestPalindrome(s string) string {
+	if len(s) == 0 {
+		return ""
+	}
+	p := make([][]bool, len(s))
+	pos := make([]int, 2)
+	for i := 0; i < len(s); i++ {
+		p[i] = make([]bool, len(s))
+		p[i][i] = true
+		if i < len(s)-1 {
+			if s[i] == s[i+1] {
+				pos[0], pos[1] = i, i+1
+				p[i][i+1] = true
+			}
+		}
+	}
+	for i := len(s) - 1; i >= 0; i-- {
+		for j := i + 2; j < len(s); j++ {
+			if !p[i+1][j-1] {
+				p[i][j] = false
+			} else if s[i] == s[j] {
+				p[i][j] = true
+				if pos[1]-pos[0] < j-i {
+					pos[0], pos[1] = i, j
+				}
+			}
+		}
+	}
+	return string(s[pos[0] : pos[1]+1])
+}
+
+// O(n2), O(1)
+func longestPalindrome1(s string) string {
+	if len(s) == 0 {
+		return ""
+	}
+	start, end := 0, 0
+	for i := 0; i < len(s); i++ {
+		left1, right1 := expandAroundCenter(s, i, i)
+		left2, right2 := expandAroundCenter(s, i, i+1)
+		if right1-left1 > end-start {
+			start, end = left1, right1
+		}
+		if right2-left2 > end-start {
+			start, end = left2, right2
+		}
+	}
+	return s[start : end+1]
+}
+
+func expandAroundCenter(s string, left, right int) (int, int) {
+	for ; left >= 0 && right < len(s) && s[left] == s[right]; left, right = left-1, right+1 {
+	}
+	return left + 1, right - 1
+}
+
+/*
+给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]
+				6
+		/				\
+		2				8
+	/		\		/		\
+	0		4		7		9
+		/		\
+		3		5
+示例 1:
+输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+输出: 6
+解释: 节点 2 和节点 8 的最近公共祖先是 6。
+示例 2:
+输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+输出: 2
+解释: 节点 2 和节点 4 的最近公共祖先是 2, 因为根据定义最近公共祖先节点可以为节点本身。
+
+
+说明:
+所有节点的值都是唯一的。
+p、q 为不同节点且均存在于给定的二叉搜索树中。
+*/
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	if root.Val == p.Val {
+		return root
+	}
+	if root.Val == q.Val {
+		return root
+	}
+	if find(root.Left, p) && find(root.Left, q) {
+		return lowestCommonAncestor(root.Left, p, q)
+	}
+	if find(root.Right, p) && find(root.Right, q) {
+		return lowestCommonAncestor(root.Right, p, q)
+	}
+	return root
+}
+
+func find(root, p *TreeNode) bool {
+	if root == nil {
+		return false
+	}
+	if root.Val == p.Val {
+		return true
+	}
+	return find(root.Right, p) || find(root.Left, p)
 }
