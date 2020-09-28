@@ -40,3 +40,13 @@ func Test_buildTree(t *testing.T) {
 func Test_longestPalindrome(t *testing.T) {
 	t.Log(longestPalindrome("abcba"))
 }
+
+func Test_connect(t *testing.T) {
+	root := &Node{Val: 1}
+	root.Left = &Node{Val: 2}
+	root.Right = &Node{Val: 3}
+	root.Left.Right = &Node{Val: 4}
+	root.Left.Left = &Node{Val: 5}
+	root.Right.Right = &Node{Val: 7}
+	t.Log(connect(root))
+}

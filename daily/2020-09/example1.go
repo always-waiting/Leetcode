@@ -21,6 +21,7 @@ func main() {
 5. 从中序与后序遍历序列构造二叉树	--	https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
 6. 最长回文子串		--	https://leetcode-cn.com/problems/longest-palindromic-substring/
 7. 二叉搜索树的最近公共祖先		--	https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+8. 填充每个节点的下一个右侧节点指针 II		--	https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii/
 */
 
 /*
@@ -624,4 +625,105 @@ func find(root, p *TreeNode) bool {
 		return true
 	}
 	return find(root.Right, p) || find(root.Left, p)
+}
+
+/*
+填充每个节点的下一个右侧节点指针 II
+给定一个二叉树
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+初始状态下，所有 next 指针都被设置为 NULL。
+进阶：
+你只能使用常量级额外空间。
+使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
+
+示例：
+			1								1	-> null
+		/		\						/		\
+		2		3						2	->	3	-> null
+	/		\		\				/		\		\
+	4		5		7				4	->	5	->	7	->	null
+输入：root = [1,2,3,4,5,null,7]
+输出：[1,#,2,3,#,4,5,7,#]
+解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。
+
+提示：
+树中的节点数小于 6000
+-100 <= node.val <= 100
+*/
+type Node struct {
+	Val   int
+	Left  *Node
+	Right *Node
+	Next  *Node
+}
+
+func connect(root *Node) *Node {
+	levelVals := depLoop(root)
+	for _, vals := range levelVals {
+		for i := 0; i < len(vals)-1; i++ {
+			vals[i].Next = vals[i+1]
+		}
+	}
+	return root
+}
+
+func depLoop(root *Node) [][]*Node {
+	if root == nil {
+		return nil
+	}
+	ret := [][]*Node{[]*Node{root}}
+	left := depLoop(root.Left)
+	right := depLoop(root.Right)
+	if left != nil {
+		for i := 0; i < len(left); i++ {
+			tmp := append([]*Node{}, left[i]...)
+			if i < len(right) {
+				tmp = append(tmp, right[i]...)
+			}
+			ret = append(ret, tmp)
+		}
+	}
+	if len(left) < len(right) {
+		for i := len(left); i < len(right); i++ {
+			ret = append(ret, right[i])
+		}
+	}
+	return ret
+}
+
+func connect1(root *Node) *Node {
+	if root == nil {
+		return nil
+	}
+	start := root
+	var nStart, now *Node
+	for start != nil {
+		if start.Left != nil {
+			if nStart == nil {
+				nStart = start.Left
+				now = start.Left
+			} else {
+				now.Next = start.Left
+				now = start.Left
+			}
+		}
+		if start.Right != nil {
+			if nStart == nil {
+				nStart = start.Right
+				now = start.Right
+			} else {
+				now.Next = start.Right
+				now = start.Right
+			}
+		}
+		start = start.Next
+	}
+	connect(nStart)
+	return root
 }
