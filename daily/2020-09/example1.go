@@ -22,6 +22,7 @@ func main() {
 6. 最长回文子串		--	https://leetcode-cn.com/problems/longest-palindromic-substring/
 7. 二叉搜索树的最近公共祖先		--	https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 8. 填充每个节点的下一个右侧节点指针 II		--	https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii/
+9. 二叉树的后序遍历		--	https://leetcode-cn.com/problems/binary-tree-postorder-traversal/
 */
 
 /*
@@ -726,4 +727,59 @@ func connect1(root *Node) *Node {
 	}
 	connect(nStart)
 	return root
+}
+
+/*
+145. 二叉树的后序遍历
+给定一个二叉树，返回它的 后序 遍历。
+
+示例:
+输入: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+输出: [3,2,1]
+进阶: 递归算法很简单，你可以通过迭代算法完成吗？
+*/
+func postorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	ret := make([]int, 0)
+	if root.Left != nil {
+		ret = postorderTraversal(root.Left)
+	}
+	if root.Right != nil {
+		tmp := postorderTraversal(root.Right)
+		ret = append(ret, tmp...)
+	}
+	ret = append(ret, root.Val)
+	return ret
+
+}
+
+// 迭代算法:
+func postorderTraversal1(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	orders := []*TreeNode{root}
+	ret := []int{}
+	for len(orders) != 0 {
+		now := orders[len(orders)-1]
+		ret = append(ret, now.Val)
+		orders = orders[0 : len(orders)-1]
+		if now.Left != nil {
+			orders = append(orders, now.Left)
+		}
+		if now.Right != nil {
+			orders = append(orders, now.Right)
+		}
+	}
+	for i := 0; i < len(ret)/2; i++ {
+		ret[i], ret[len(ret)-1-i] = ret[len(ret)-1-i], ret[i]
+	}
+	return ret
 }

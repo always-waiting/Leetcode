@@ -50,3 +50,11 @@ func Test_connect(t *testing.T) {
 	root.Right.Right = &Node{Val: 7}
 	t.Log(connect(root))
 }
+
+func Test_postorderTraversal(t *testing.T) {
+	root := &TreeNode{Val: 3}
+	root.Left = &TreeNode{Val: 2}
+	root.Right = &TreeNode{Val: 4}
+	root.Right.Left = &TreeNode{Val: 1}
+	t.Log(postorderTraversal1(root))
+}
