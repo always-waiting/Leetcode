@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 /*
@@ -163,4 +164,77 @@ func detectCycle(head *ListNode) *ListNode {
 		}
 	}
 	return nil
+}
+
+/*
+530. 二叉搜索树的最小绝对差
+给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。
+示例：
+输入：
+   1
+    \
+     3
+    /
+   2
+输出：
+1
+解释：
+最小绝对差为 1，其中 2 和 1 的差的绝对值为 1（或者 2 和 3）。
+提示：
+树中至少有 2 个节点。
+*/
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func getMinimumDifference(root *TreeNode) int {
+	preOrder := getInorder(root)
+	minRet := preOrder[1] - preOrder[0]
+	for i := 1; i < len(preOrder)-1; i++ {
+		tmp := preOrder[i+1] - preOrder[i]
+		if tmp < minRet {
+			minRet = tmp
+		}
+	}
+	return minRet
+}
+
+func getInorder(root *TreeNode) []int {
+	var ret []int
+	if root.Left != nil {
+		ret = getInorder(root.Left)
+	}
+	ret = append(ret, root.Val)
+	if root.Right != nil {
+		tmp := getInorder(root.Right)
+		ret = append(ret, tmp...)
+	}
+	return ret
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func getMinimumDifferenceWooooo(root *TreeNode) int {
+	ans, pre := math.MaxInt64, -1
+	var dfs func(*TreeNode)
+	dfs = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+		dfs(node.Left)
+		if pre != -1 && node.Val-pre < ans {
+			ans = node.Val - pre
+		}
+		pre = node.Val
+		dfs(node.Right)
+	}
+	dfs(root)
+	return ans
 }
