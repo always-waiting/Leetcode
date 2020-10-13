@@ -15,3 +15,17 @@ func Test_sortColors(t *testing.T) {
 	sortColors(nums)
 	t.Log(nums)
 }
+
+func Test_swapPairs(t *testing.T) {
+	head := &ListNode{Val: 1}
+	head.Next = &ListNode{Val: 2}
+	head.Next.Next = &ListNode{Val: 3}
+	head.Next.Next.Next = &ListNode{Val: 4}
+	ret := swapPairs(head)
+	t.Log(
+		ret.Val,
+		ret.Next.Val,
+		ret.Next.Next.Val,
+		ret.Next.Next.Next.Val,
+	)
+}
