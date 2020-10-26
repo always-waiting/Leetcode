@@ -29,3 +29,7 @@ func Test_swapPairs(t *testing.T) {
 		ret.Next.Next.Next.Val,
 	)
 }
+
+func Test_smallerNumbersThanCurrent(t *testing.T) {
+	t.Log(smallerNumbersThanCurrent([]int{8, 1, 2, 2, 3}))
+}
