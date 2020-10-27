@@ -13,6 +13,9 @@ import (
 5. 两两交换链表中的节点		--	https://leetcode-cn.com/problems/swap-nodes-in-pairs/
 6. 有多少小于当前数字的数字	--	https://leetcode-cn.com/problems/how-many-numbers-are-smaller-than-the-current-number/
 7. 二叉树的前序遍历			--	https://leetcode-cn.com/problems/binary-tree-preorder-traversal/
+8. 数组中的最长山脉			--	https://leetcode-cn.com/problems/longest-mountain-in-array/
+9. 视频拼接					--	https://leetcode-cn.com/problems/video-stitching/
+10. 回文链表				--	https://leetcode-cn.com/problems/palindrome-linked-list/
 */
 func test() {
 	fmt.Println("testing")
@@ -557,4 +560,31 @@ func videoStitching(clips [][]int, T int) int {
 		return -1
 	}
 	return len(picks)
+}
+
+/*
+234. 回文链表
+请判断一个链表是否为回文链表。
+示例 1:
+输入: 1->2
+输出: false
+示例 2:
+输入: 1->2->2->1
+输出: true
+进阶：
+你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+*/
+func isPalindrome(head *ListNode) bool {
+	vals := []int{}
+	now := head
+	for now != nil {
+		vals = append(vals, now.Val)
+		now = now.Next
+	}
+	for i := 0; i < len(vals); i++ {
+		if vals[i] != vals[len(vals)-1-i] {
+			return false
+		}
+	}
+	return true
 }
