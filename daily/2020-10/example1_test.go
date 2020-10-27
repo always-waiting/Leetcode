@@ -67,3 +67,7 @@ func Test_videoStitching(t *testing.T) {
 			[]int{3, 4}, []int{4, 5}, []int{5, 7}, []int{6, 9}}, 9),
 	)
 }
+
+func Test_partitionLabels(t *testing.T) {
+	t.Log(partitionLabels("ababcbacadefegdehijhklij"))
+}

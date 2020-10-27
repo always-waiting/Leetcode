@@ -16,6 +16,7 @@ import (
 8. 数组中的最长山脉			--	https://leetcode-cn.com/problems/longest-mountain-in-array/
 9. 视频拼接					--	https://leetcode-cn.com/problems/video-stitching/
 10. 回文链表				--	https://leetcode-cn.com/problems/palindrome-linked-list/
+11. 划分字母区间			--	https://leetcode-cn.com/problems/partition-labels/
 */
 func test() {
 	fmt.Println("testing")
@@ -587,4 +588,69 @@ func isPalindrome(head *ListNode) bool {
 		}
 	}
 	return true
+}
+
+/*
+763. 划分字母区间
+字符串 S 由小写字母组成。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。返回一个表示每个字符串片段的长度的列表。
+
+示例：
+输入：S = "ababcbacadefegdehijhklij"
+输出：[9,7,8]
+解释：
+划分结果为 "ababcbaca", "defegde", "hijhklij"。
+每个字母最多出现在一个片段中。
+像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
+
+提示：
+S的长度在[1, 500]之间。
+S只包含小写字母 'a' 到 'z' 。
+*/
+func partitionLabels(S string) []int {
+	if len(S) == 0 {
+		return nil
+	}
+	startVal := S[0]
+	endIdx := 0
+	for i := 1; i < len(S); i++ {
+		if S[i] == startVal {
+			endIdx = i
+		}
+	}
+	for i := 1; i < endIdx; i++ {
+		for j := endIdx + 1; j < len(S); j++ {
+			if S[i] == S[j] {
+				endIdx = j
+			}
+		}
+	}
+	ret := []int{endIdx + 1}
+	if endIdx < len(S) {
+		nS := S[endIdx+1:]
+		next := partitionLabels(nS)
+		if next != nil {
+			ret = append(ret, next...)
+		}
+	}
+	return ret
+}
+
+func partitionLabels1(S string) []int {
+	visit := map[byte]int{}
+	for i := 0; i < len(S); i++ {
+		visit[S[i]] = i
+	}
+	var start, end int
+	ret := []int{}
+	for i := 0; i < len(S); i++ {
+		if end < visit[S[i]] {
+			end = visit[S[i]]
+		}
+		if i == end {
+			ret = append(ret, end-start+1)
+			start = end + 1
+			end = start
+		}
+	}
+	return ret
 }
