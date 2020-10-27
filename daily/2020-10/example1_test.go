@@ -40,3 +40,30 @@ func Test_longestMountain(t *testing.T) {
 	t.Log(longestMountain([]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}))
 	t.Log(longestMountain([]int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}))
 }
+
+func Test_videoStitching(t *testing.T) {
+	t.Log(
+		videoStitching([][]int{
+			[]int{0, 2}, []int{4, 6}, []int{8, 10},
+			[]int{1, 9}, []int{1, 5}, []int{5, 9},
+		}, 10),
+	)
+	t.Log(
+		videoStitching([][]int{
+			[]int{0, 1}, []int{1, 2},
+		}, 5),
+	)
+	t.Log(
+		videoStitching([][]int{
+			[]int{0, 4}, []int{2, 8},
+		}, 5),
+	)
+	t.Log(
+		videoStitching([][]int{
+			[]int{0, 1}, []int{6, 8}, []int{0, 2},
+			[]int{5, 6}, []int{0, 4}, []int{0, 3},
+			[]int{6, 7}, []int{1, 3}, []int{4, 7},
+			[]int{1, 4}, []int{2, 5}, []int{2, 6},
+			[]int{3, 4}, []int{4, 5}, []int{5, 7}, []int{6, 9}}, 9),
+	)
+}
