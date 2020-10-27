@@ -12,6 +12,7 @@ import (
 4. 环形链表IIi	--	https://leetcode-cn.com/problems/linked-list-cycle-ii/
 5. 两两交换链表中的节点		--	https://leetcode-cn.com/problems/swap-nodes-in-pairs/
 6. 有多少小于当前数字的数字	--	https://leetcode-cn.com/problems/how-many-numbers-are-smaller-than-the-current-number/
+7. 二叉树的前序遍历			--	https://leetcode-cn.com/problems/binary-tree-preorder-traversal/
 */
 func test() {
 	fmt.Println("testing")
@@ -350,4 +351,60 @@ func maxArr(nums []int) int {
 		}
 	}
 	return max
+}
+
+/*
+144. 二叉树的前序遍历
+给定一个二叉树，返回它的 前序 遍历。
+
+示例:
+输入: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+输出: [1,2,3]
+*/
+func preorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	ret := []int{root.Val}
+	right := preorderTraversal(root.Right)
+	left := preorderTraversal(root.Left)
+	if left != nil {
+		ret = append(ret, left...)
+	}
+	if right != nil {
+		ret = append(ret, right...)
+	}
+	return ret
+}
+
+func preorderTraversal1(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	ret := []int{root.Val}
+	stack := []*TreeNode{}
+	if root.Right != nil {
+		stack = append(stack, root.Right)
+	}
+	if root.Left != nil {
+		stack = append(stack, root.Left)
+	}
+	for len(stack) != 0 {
+		now := stack[len(stack)-1]
+		stack = stack[0 : len(stack)-1]
+		ret = append(ret, now.Val)
+		if now.Right != nil {
+			stack = append(stack, now.Right)
+		}
+		if now.Left != nil {
+			stack = append(stack, now.Left)
+		}
+	}
+	return ret
 }
