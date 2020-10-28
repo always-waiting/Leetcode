@@ -71,3 +71,7 @@ func Test_videoStitching(t *testing.T) {
 func Test_partitionLabels(t *testing.T) {
 	t.Log(partitionLabels("ababcbacadefegdehijhklij"))
 }
+
+func Test_uniqueOccurrences(t *testing.T) {
+	t.Log(uniqueOccurrences([]int{1, 2}))
+}
