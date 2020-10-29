@@ -75,3 +75,13 @@ func Test_partitionLabels(t *testing.T) {
 func Test_uniqueOccurrences(t *testing.T) {
 	t.Log(uniqueOccurrences([]int{1, 2}))
 }
+
+func Test_sumNumbers(t *testing.T) {
+	root := &TreeNode{Val: 4}
+	root.Left = &TreeNode{Val: 9}
+	root.Right = &TreeNode{Val: 0}
+	root.Left.Left = &TreeNode{Val: 5}
+	root.Left.Right = &TreeNode{Val: 1}
+
+	t.Log(sumNumbers(root))
+}
