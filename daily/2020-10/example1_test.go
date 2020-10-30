@@ -85,3 +85,12 @@ func Test_sumNumbers(t *testing.T) {
 
 	t.Log(sumNumbers(root))
 }
+
+func Test_islandPerimeter(t *testing.T) {
+	t.Log(islandPerimeter([][]int{
+		[]int{0, 1, 0, 0},
+		[]int{1, 1, 1, 0},
+		[]int{0, 1, 0, 0},
+		[]int{1, 1, 0, 0},
+	}))
+}
