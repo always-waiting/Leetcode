@@ -19,6 +19,9 @@ import (
 11. 划分字母区间			--	https://leetcode-cn.com/problems/partition-labels/
 12. 根到叶子节点数字之和	--	https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/
 13. 岛屿的周长				--	https://leetcode-cn.com/problems/island-perimeter/
+14. 两个数组的交集			--	https://leetcode-cn.com/problems/intersection-of-two-arrays/
+15. 单词拆分 II				--	https://leetcode-cn.com/problems/word-break-ii/
+
 */
 func test() {
 	fmt.Println("testing")
@@ -790,4 +793,118 @@ func islandPerimeter(grid [][]int) int {
 		}
 	}
 	return 4*total - coverNum
+}
+
+/*
+349. 两个数组的交集
+给定两个数组，编写一个函数来计算它们的交集。
+示例 1：
+输入：nums1 = [1,2,2,1], nums2 = [2,2]
+输出：[2]
+示例 2：
+输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+输出：[9,4]
+
+说明：
+输出结果中的每个元素一定是唯一的。
+我们可以不考虑输出结果的顺序。
+*/
+func intersection(nums1 []int, nums2 []int) []int {
+	ret := []int{}
+	visit := map[int]int{}
+	for _, val := range nums1 {
+		if _, ok := visit[val]; !ok {
+			visit[val]++
+		}
+	}
+	for _, val := range nums2 {
+		if v, ok := visit[val]; ok && v == 1 {
+			ret = append(ret, val)
+			visit[val]++
+		}
+	}
+	return ret
+}
+
+/*
+140. 单词拆分 II
+给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，在字符串中增加空格来构建一个句子，
+使得句子中所有的单词都在词典中。返回所有这些可能的句子。
+
+说明：
+分隔时可以重复使用字典中的单词。
+你可以假设字典中没有重复的单词。
+示例 1：
+输入:
+s = "catsanddog"
+wordDict = ["cat", "cats", "and", "sand", "dog"]
+输出:
+[
+  "cats and dog",
+  "cat sand dog"
+]
+示例 2：
+输入:
+s = "pineapplepenapple"
+wordDict = ["apple", "pen", "applepen", "pine", "pineapple"]
+输出:
+[
+  "pine apple pen apple",
+  "pineapple pen apple",
+  "pine applepen apple"
+]
+解释: 注意你可以重复使用字典中的单词。
+示例 3：
+输入:
+s = "catsandog"
+wordDict = ["cats", "dog", "sand", "and", "cat"]
+输出:
+[]
+*/
+type wordNode struct {
+	Word  byte
+	Nexts map[byte]*wordNode
+	End   bool
+}
+
+func (this *wordNode) GetWords() []string {
+	if this == nil {
+		return nil
+	}
+	ret := []string{}
+	for _, next := range this.Nexts {
+		nStrs := next.GetWords()
+		for _, str := range nStrs {
+			ret = append(ret, string(this.Word)+str)
+		}
+	}
+	if len(ret) == 0 || this.End {
+		ret = append(ret, string(this.Word))
+	}
+	return ret
+}
+
+func wordBreak(s string, wordDict []string) []string {
+	return nil
+}
+
+func makeWordTree(start byte, wordDict []string) *wordNode {
+	root := &wordNode{Word: start, Nexts: map[byte]*wordNode{}}
+	var nextStep func(*wordNode, int, []string)
+	nextStep = func(node *wordNode, step int, dict []string) {
+		for _, word := range dict {
+			if step < len(word) && word[step] == node.Word {
+				if step+1 < len(word) {
+					if _, ok := node.Nexts[word[step+1]]; !ok {
+						node.Nexts[word[step+1]] = &wordNode{Word: word[step+1], Nexts: map[byte]*wordNode{}}
+					}
+					nextStep(node.Nexts[word[step+1]], step+1, dict)
+				} else {
+					node.End = true
+				}
+			}
+		}
+	}
+	nextStep(root, 0, wordDict)
+	return root
 }

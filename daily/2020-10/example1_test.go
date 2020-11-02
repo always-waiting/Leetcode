@@ -94,3 +94,19 @@ func Test_islandPerimeter(t *testing.T) {
 		[]int{1, 1, 0, 0},
 	}))
 }
+
+func Test_intersection(t *testing.T) {
+	t.Log(intersection([]int{1, 2, 2, 3}, []int{2, 2}))
+}
+
+func Test_wordBreak(t *testing.T) {
+	/*
+		root := &wordNode{Word: 'c', Nexts: map[byte]*wordNode{}}
+		root.Nexts['a'] = &wordNode{Word: 'a', Nexts: map[byte]*wordNode{}, End: true}
+		root.Nexts['a'].Nexts['t'] = &wordNode{Word: 't', End: true}
+		t.Log(root.GetWords())
+	*/
+	tree := makeWordTree('c', []string{"cats", "cat", "and", "sand", "dog"})
+	//tree := makeWordTree('c', []string{"cats", "cat"})
+	t.Log(tree.GetWords())
+}
