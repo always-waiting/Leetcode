@@ -31,3 +31,12 @@ func Test_ladderLength(t *testing.T) {
 	t.Log(ladderLength("hit", "cog", []string{"hot", "dot", "lot", "log", "cog"}))
 	t.Log(ladderLength("abc", "def", []string{"aec", "mec", "aef", "def"}))
 }
+
+func Test_kClosest(t *testing.T) {
+	t.Log(kClosest(
+		[][]int{
+			[]int{1, 3}, []int{2, -2},
+		},
+		1,
+	))
+}

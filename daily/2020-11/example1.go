@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"sort"
 )
 
 func test() {
@@ -13,6 +14,8 @@ func test() {
 1. 有效的山脉数组	--	https://leetcode-cn.com/problems/valid-mountain-array/
 2. 插入区间			--	https://leetcode-cn.com/problems/insert-interval/
 3. 单次接龙			--	https://leetcode-cn.com/problems/word-ladder/
+4. 根据数字二进制下1的数目排序	--	https://leetcode-cn.com/problems/sort-integers-by-the-number-of-1-bits/
+5. 最接近原点的 K 个点	--	https://leetcode-cn.com/problems/k-closest-points-to-origin/
 */
 
 /*
@@ -217,4 +220,78 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
 		}
 	}
 	return 0
+}
+
+/*
+1356. 根据数字二进制下 1 的数目排序
+给你一个整数数组 arr 。请你将数组中的元素按照其二进制表示中数字 1 的数目升序排序。
+如果存在多个数字二进制中 1 的数目相同，则必须将它们按照数值大小升序排列。
+请你返回排序后的数组。
+
+示例 1：
+输入：arr = [0,1,2,3,4,5,6,7,8]
+输出：[0,1,2,4,8,3,5,6,7]
+解释：[0] 是唯一一个有 0 个 1 的数。
+[1,2,4,8] 都有 1 个 1 。
+[3,5,6] 有 2 个 1 。
+[7] 有 3 个 1 。
+按照 1 的个数排序得到的结果数组为 [0,1,2,4,8,3,5,6,7]
+示例 2：
+输入：arr = [1024,512,256,128,64,32,16,8,4,2,1]
+输出：[1,2,4,8,16,32,64,128,256,512,1024]
+解释：数组中所有整数二进制下都只有 1 个 1 ，所以你需要按照数值大小将它们排序。
+示例 3：
+输入：arr = [10000,10000]
+输出：[10000,10000]
+示例 4：
+输入：arr = [2,3,5,7,11,13,17,19]
+输出：[2,3,5,17,7,11,13,19]
+示例 5：
+输入：arr = [10,100,1000,10000]
+输出：[10,100,10000,1000]
+
+提示：
+1 <= arr.length <= 500
+0 <= arr[i] <= 10^4
+*/
+func sortByBits(arr []int) []int {
+	return nil
+}
+
+/*
+973. 最接近原点的 K 个点
+我们有一个由平面上的点组成的列表 points。需要从中找出 K 个距离原点 (0, 0) 最近的点。
+（这里，平面上两点之间的距离是欧几里德距离。）
+你可以按任何顺序返回答案。除了点坐标的顺序之外，答案确保是唯一的。
+
+示例 1：
+输入：points = [[1,3],[-2,2]], K = 1
+输出：[[-2,2]]
+解释：
+(1, 3) 和原点之间的距离为 sqrt(10)，
+(-2, 2) 和原点之间的距离为 sqrt(8)，
+由于 sqrt(8) < sqrt(10)，(-2, 2) 离原点更近。
+我们只需要距离原点最近的 K = 1 个点，所以答案就是 [[-2,2]]。
+示例 2：
+输入：points = [[3,3],[5,-1],[-2,4]], K = 2
+输出：[[3,3],[-2,4]]
+（答案 [[-2,4],[3,3]] 也会被接受。）
+
+提示：
+1 <= K <= points.length <= 10000
+-10000 < points[i][0] < 10000
+-10000 < points[i][1] < 10000
+*/
+type kNode struct {
+	next *kNode
+	pos  []int
+	dis  int
+}
+
+func kClosest(points [][]int, K int) [][]int {
+	sort.Slice(points, func(i, j int) bool {
+		p, q := points[i], points[j]
+		return p[0]*p[0]+p[1]*p[1] < q[0]*q[0]+q[1]*q[1]
+	})
+	return points[:K]
 }
