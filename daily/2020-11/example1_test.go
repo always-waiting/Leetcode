@@ -40,3 +40,9 @@ func Test_kClosest(t *testing.T) {
 		1,
 	))
 }
+
+func Test_nextPermutation(t *testing.T) {
+	nums := []int{1, 3, 2}
+	nextPermutation(nums)
+	t.Log(nums)
+}
