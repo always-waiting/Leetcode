@@ -46,3 +46,15 @@ func Test_nextPermutation(t *testing.T) {
 	nextPermutation(nums)
 	t.Log(nums)
 }
+
+func Test_oddEvenList(t *testing.T) {
+	root := &ListNode{Val: 1}
+	root.Next = &ListNode{Val: 2}
+	root.Next.Next = &ListNode{Val: 3}
+	root.Next.Next.Next = &ListNode{Val: 4}
+	root.Next.Next.Next.Next = &ListNode{Val: 5}
+	root.Next.Next.Next.Next.Next = &ListNode{Val: 6}
+	t.Log(root.Line())
+	oddEvenList(root)
+	t.Log(root.Line())
+}
