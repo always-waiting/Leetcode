@@ -18,6 +18,7 @@ func test() {
 5. 最接近原点的 K 个点	--	https://leetcode-cn.com/problems/k-closest-points-to-origin/
 6. 下一个排列			--	https://leetcode-cn.com/problems/next-permutation/
 7. 自由之路				--	https://leetcode-cn.com/problems/freedom-trail/
+8. 根据身高重建队列		--	https://leetcode-cn.com/problems/queue-reconstruction-by-height/
 */
 
 /*
@@ -447,4 +448,38 @@ func oddEvenList(head *ListNode) *ListNode {
 		loopEven.Next = nil
 	}
 	return head
+}
+
+/*
+406. 根据身高重建队列
+假设有打乱顺序的一群人站成一个队列。 每个人由一个整数对(h, k)表示，其中h是这个人的身高，k是排在这个人前面且身高大于或等于h的人数。 编写一个算法来重建这个队列。
+
+注意：
+总人数少于1100人。
+示例
+输入:
+[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+输出:
+[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+*/
+func reconstructQueue(people [][]int) [][]int {
+	sort.Slice(people, func(i, j int) bool {
+		a, b := people[i], people[j]
+		return a[0] < b[0] || a[0] == b[0] && a[1] > b[1]
+	})
+	//fmt.Println(people)
+	ans := make([][]int, len(people))
+	for _, person := range people {
+		spaces := person[1] + 1
+		for i := range ans {
+			if ans[i] == nil {
+				spaces--
+				if spaces == 0 {
+					ans[i] = person
+					break
+				}
+			}
+		}
+	}
+	return ans
 }
