@@ -65,3 +65,9 @@ func Test_reconstructQueue(t *testing.T) {
 		[]int{5, 0}, []int{6, 1}, []int{5, 2},
 	}))
 }
+
+func Test_moveZeroes(t *testing.T) {
+	a := []int{0, 1, 0, 3, 12}
+	moveZeroes(a)
+	t.Log(a)
+}

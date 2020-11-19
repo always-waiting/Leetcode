@@ -19,6 +19,7 @@ func test() {
 6. 下一个排列			--	https://leetcode-cn.com/problems/next-permutation/
 7. 自由之路				--	https://leetcode-cn.com/problems/freedom-trail/
 8. 根据身高重建队列		--	https://leetcode-cn.com/problems/queue-reconstruction-by-height/
+9. 移动零				--	https://leetcode-cn.com/problems/move-zeroes/
 */
 
 /*
@@ -451,7 +452,7 @@ func oddEvenList(head *ListNode) *ListNode {
 }
 
 /*
-406. 根据身高重建队列
+8. 根据身高重建队列
 假设有打乱顺序的一群人站成一个队列。 每个人由一个整数对(h, k)表示，其中h是这个人的身高，k是排在这个人前面且身高大于或等于h的人数。 编写一个算法来重建这个队列。
 
 注意：
@@ -482,4 +483,34 @@ func reconstructQueue(people [][]int) [][]int {
 		}
 	}
 	return ans
+}
+
+/*
+9. 移动零
+给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+示例:
+输入: [0,1,0,3,12]
+输出: [1,3,12,0,0]
+说明:
+必须在原数组上操作，不能拷贝额外的数组。
+尽量减少操作次数。
+*/
+func moveZeroes(nums []int) {
+	var idx1, idx2 int
+	numLen := len(nums)
+	for idx1 < numLen && idx2 < numLen {
+		if nums[idx1] != 0 {
+			idx1++
+			idx2 = idx1
+		} else {
+			if nums[idx2] != 0 {
+				tmp := nums[idx2]
+				nums[idx2] = nums[idx1]
+				nums[idx1] = tmp
+				idx1++
+			} else {
+				idx2++
+			}
+		}
+	}
 }
